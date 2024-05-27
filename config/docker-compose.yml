@@ -1,6 +1,5 @@
 version: "3.8"
  
- 
 volumes: # 自定义数据卷
 
 #p1:proj1_sunmoonai
@@ -15,7 +14,6 @@ volumes: # 自定义数据卷
   
  
 networks: # 自定义网络(默认桥接), 不使用links通信
-
 
 #p1:proj1_sunmoonai
   p1_n_nnginx_master_1:
