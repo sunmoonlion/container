@@ -8,10 +8,6 @@ volumes: # 自定义数据卷
   p0_v_mysql_slave_1: 
   p0_v_redis_master_1: 
   p0_v_redis_slave_1:
-  media_vol: 
-  static_vol: 
-  tracker_vol: 
-  storage_vol: 
 
 #p1:proj1_sunmoonai
   p1_v_mysql_master_1: 
@@ -26,21 +22,11 @@ networks: # 自定义网络(默认桥接), 不使用links通信
     driver: bridge
   p0_n_redis_master_1: 
     driver: bridge
-  elasticsearch_network:
-    driver: bridge
-  fastdfs_network:
-    driver: bridge
 
 #p1:proj1_sunmoonai
-  p1_n_nnginx_master_1:
-    driver: bridge
   p1_n_mysql_master_1:
     driver: bridge
   p1_n_redis_master_1: 
-    driver: bridge
-  elasticsearch_network:
-    driver: bridge
-  fastdfs_network:
     driver: bridge
 
 services:
@@ -48,7 +34,7 @@ services:
 #p0:proj0_toolbox
   p0_s_redis_master_1:
     image: redis:6.2.5
-    container_name: container_p1_s_redis_master
+    container_name: container_p0_s_redis_master
     command: redis-server /etc/redis/redis.conf # 容器启动后启动redis服务器
     networks:
       - p0_n_redis_master_1
@@ -61,7 +47,7 @@ services:
  
   p0_s_redis_slave_1:
     image: redis:6.2.5
-    container_name: container_p1_s_redis_slave_1
+    container_name: container_p0_s_redis_slave_1
     command: redis-server /etc/redis/redis.conf # 容器启动后启动redis服务器
     networks:
       - p0_n_redis_master_1
@@ -74,7 +60,7 @@ services:
 
   p0_s_mysql_master_1:
     image: mysql:8.0.28
-    container_name: container_p1_s_mysql_master_1
+    container_name: container_p0_s_mysql_master_1
     env_file:  
       - ./mysql/p0_b_mysql_master_1/env/.env # 使用了环境变量文件
     networks:  
@@ -89,7 +75,7 @@ services:
  
   p0_s_mysql_slave_1:
     image: mysql:8.0.28
-    container_name: contanier_p1_s_mysql_slave_1
+    container_name: contanier_p0_s_mysql_slave_1
     env_file:  
       - ./mysql/p0_b_mysql_slave_1/env/.env # 使用了环境变量文件
     networks:  
