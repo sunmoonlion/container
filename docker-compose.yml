@@ -112,7 +112,7 @@ services:
       - p1_n_redis_master_1
     volumes:
       - p1_v_redis_slave_1:/data # 通过挂载给redis数据备份
-      - .proj1_sunmoonai/proj1_config/p1_b_redis_slave_1/redis.conf:/etc/redis/redis.conf # 挂载redis配置文件
+      - ./proj1_sunmoonai/proj1_config/p1_b_redis_slave_1/redis.conf:/etc/redis/redis.conf # 挂载redis配置文件
     ports:
       - "6380:6379"
     #restart: always # always表容器运行发生错误时一直重启
@@ -121,13 +121,13 @@ services:
     image: mysql:8.0.28
     container_name: container_p1_s_mysql_master_1
     env_file:  
-      - .proj1_sunmoonai/proj1_config/p1_b_mysql_master_1/env/.env # 使用了环境变量文件
+      - ./proj1_sunmoonai/proj1_config/p1_b_mysql_master_1/env/.env # 使用了环境变量文件
     networks:  
       - p1_n_mysql_master_1
     volumes:
       - p1_v_mysql_master_1:/var/lib/mysql:rw # 挂载数据库数据, 可读可写
-      - .proj1_sunmoonai/proj1_config/p1_b_mysql_master_1/conf/my.cnf:/etc/mysql/my.cnf # 挂载配置文件
-      - .proj1_sunmoonai/proj1_config/p1_mysql_master_1/init/:/docker-entrypoint-initdb.d/ # 挂载数据初始化sql脚本
+      - ./proj1_sunmoonai/proj1_config/p1_b_mysql_master_1/conf/my.cnf:/etc/mysql/my.cnf # 挂载配置文件
+      - ./proj1_sunmoonai/proj1_config/p1_mysql_master_1/init/:/docker-entrypoint-initdb.d/ # 挂载数据初始化sql脚本
     ports:
       - "3301:3306" # 与配置文件保持一致
     #restart: always
@@ -136,13 +136,13 @@ services:
     image: mysql:8.0.28
     container_name: contanier_p1_s_mysql_slave_1
     env_file:  
-      - .proj1_sunmoonai/proj1_config/p1_b_mysql_slave_1/env/.env # 使用了环境变量文件
+      - ./proj1_sunmoonai/proj1_config/p1_b_mysql_slave_1/env/.env # 使用了环境变量文件
     networks:  
       - p1_n_mysql_master_1
     volumes:
       - p1_v_mysql_slave_1:/var/lib/mysql:rw # 挂载数据库数据, 可读可写
-      - .proj1_sunmoonai/proj1_config/p1_b_mysql_slave_1/conf/my.cnf:/etc/mysql/my.cnf # 挂载配置文件
-      - .proj1_sunmoonai/proj1_config/p1_b_mysql_slave_1/init:/docker-entrypoint-initdb.d/ # 挂载数据初始化sql脚本
+      - ./proj1_sunmoonai/proj1_config/p1_b_mysql_slave_1/conf/my.cnf:/etc/mysql/my.cnf # 挂载配置文件
+      - ./proj1_sunmoonai/proj1_config/p1_b_mysql_slave_1/init:/docker-entrypoint-initdb.d/ # 挂载数据初始化sql脚本
     ports:
       - "8301:3306" # 与配置文件保持一致
     #restart: always
