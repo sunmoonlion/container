@@ -68,7 +68,7 @@ services:
     volumes:
       - p0_v_mysql_master_1:/var/lib/mysql:rw # 挂载数据库数据, 可读可写
       - ./proj0_toolbox/proj0_config/p0_b_mysql_master_1/conf/my.cnf:/etc/mysql/my.cnf # 挂载配置文件
-      - ./proj0_toolbox/proj0_config/p0_mysql_master_1/init/:/docker-entrypoint-initdb.d/ # 挂载数据初始化sql脚本
+      - ./proj0_toolbox/proj0_config/p0_b_mysql_master_1/init/:/docker-entrypoint-initdb.d/ # 挂载数据初始化sql脚本
     ports:
       - "3300:3306" # 与配置文件保持一致
     #restart: always
