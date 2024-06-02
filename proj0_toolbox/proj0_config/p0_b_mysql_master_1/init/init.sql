@@ -1,3 +1,2 @@
-# compose/mysql/init/init.sql
-GRANT ALL PRIVILEGES ON *.* TO 'zym'@'%';
+GRANT ALL PRIVILEGES ON *.* TO 'zym'@'%' WITH GRANT OPTION;
 FLUSH PRIVILEGES;
