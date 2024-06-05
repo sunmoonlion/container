@@ -9,12 +9,16 @@ https://docs.djangoproject.com/en/5.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.0/ref/settings/
 """
-
+import os,sys
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+# 追加导包路径指向apps包
+# sys.path.insert(0, '/home/zym/Documents/projects/meiduo_project/meiduo_mall/meiduo_mall/apps')
+sys.path.insert(0, os.path.join(BASE_DIR, 'djangotoolbox/apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -25,7 +29,7 @@ SECRET_KEY = 'django-insecure-%)@6^n*#so%w!(fye%(%nmh*4u^(#c9l65o-8hzj1dj$$$8@i1
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -54,7 +58,7 @@ ROOT_URLCONF = 'djangotoolbox.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'djangotoolbox/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -63,6 +67,14 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
+        },
+    },
+    {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [os.path.join(BASE_DIR, 'djangotoolbox/jinja2_templates')],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'djangotoolbox.utils.jinja2_env.jinja2_environment',
         },
     },
 ]
