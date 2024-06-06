@@ -22,7 +22,7 @@ services:
 #p0:proj0_toolbox
   p0_s_redis_master_1:
     image: redis:6.2.5
-    container_name: container_p0_s_redis_master
+    container_name: container_p0_s_redis_master_1
     command: redis-server /etc/redis/redis.conf # 容器启动后启动redis服务器
     networks:
       - p0_n_redis_master_1
