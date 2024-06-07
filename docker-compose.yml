@@ -8,6 +8,10 @@ volumes: # 自定义数据卷
   p0_v_mysql_slave_1: 
   p0_v_redis_master_1: 
   p0_v_redis_slave_1:
+  p0_v_track_master_1:
+  p0_v_track_slave_1:
+  p0_v_storage_master_1:
+  p0_v_storage_slave_1:
 
 networks: # 自定义网络(默认桥接), 不使用links通信
 
@@ -16,10 +20,13 @@ networks: # 自定义网络(默认桥接), 不使用links通信
     driver: bridge
   p0_n_redis_master_1: 
     driver: bridge
+  p0_n_tracker_master_1: 
+    driver: bridge
 
 services:
 
 #p0:proj0_toolbox
+
   p0_s_redis_master_1:
     image: redis:6.2.5
     container_name: container_p0_s_redis_master_1
@@ -30,9 +37,9 @@ services:
       - p0_v_redis_master_1:/data # 通过挂载给redis数据备份
       - ./proj0_toolbox/proj0_config/p0_b_redis_master_1/redis.conf:/etc/redis/redis.conf # 挂载redis配置文件
     ports:
-      - "6379:6379"
+      - "6370:6379"
     #restart: always # always表容器运行发生错误时一直重启
- 
+
   p0_s_redis_slave_1:
     image: redis:6.2.5
     container_name: container_p0_s_redis_slave_1
@@ -43,7 +50,7 @@ services:
       - p0_v_redis_slave_1:/data # 通过挂载给redis数据备份
       - ./proj0_toolbox/proj0_config/p0_b_redis_slave_1/redis.conf:/etc/redis/redis.conf # 挂载redis配置文件
     ports:
-      - "6380:6379"
+      - "7370:6379"
     #restart: always # always表容器运行发生错误时一直重启
 
   p0_s_mysql_master_1:
@@ -60,7 +67,7 @@ services:
     ports:
       - "3300:3306" # 与配置文件保持一致
     #restart: always
- 
+
   p0_s_mysql_slave_1:
     image: mysql:8.0.28
     container_name: contanier_p0_s_mysql_slave_1
@@ -73,5 +80,46 @@ services:
       - ./proj0_toolbox/proj0_config/p0_b_mysql_slave_1/conf/my.cnf:/etc/mysql/my.cnf # 挂载配置文件
       - ./proj0_toolbox/proj0_config/p0_b_mysql_slave_1/init:/docker-entrypoint-initdb.d/ # 挂载数据初始化sql脚本
     ports:
-      - "8300:3306" # 与配置文件保持一致
+      - "4300:3306" # 与配置文件保持一致
     #restart: always
+
+  p0_s_tracker_master_1:
+  image: delron/fastdfs
+  #restart: always
+  container_name: container_p0_s_tracker_master_1
+  volumes:
+    - p0_v_tracker_master_1:/var/fdfs
+  command: "tracker"
+  networks:
+    - p0_n_tracker_master_1
+  ports:
+    - "22120:22122"
+
+  p0_s_storage_master_1:
+    image: delron/fastdfs
+    #restart: always
+    container_name: container_p0_s_storage_master_1
+    volumes:
+      - p0_v_storage_master_1:/var/fdfs
+      - ./proj1_sunmoonai/proj1_config/p0_b_fastdfs_master_1/conf/storage.conf:/etc/fdfs/storage.conf # 挂载storage配置文件
+    command: "storage"
+    networks:
+      - p0_n_tracker_master_1
+    ports:
+      - "23000:23000"
+      - "8880:8888"      #访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
+  
+  p0_s_storage_slave_1:
+    image: delron/fastdfs
+    #restart: always
+    container_name: container_p0_s_storage_slave_1
+    volumes:
+      - p0_v_storage_slave_1:/var/fdfs
+      - ./proj1_sunmoonai/proj1_config/p0_b_fastdfs_slave_1/conf/storage.conf:/etc/fdfs/storage.conf # 挂载storage配置文件
+    command: "storage"
+    networks:
+      - p0_n_tracker_master_1
+    ports:
+      - "33000:23000"
+      - "9880:8888"      #访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
+    
