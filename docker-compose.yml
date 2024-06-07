@@ -1,21 +1,16 @@
 version: "3.8"
  
 volumes: # 自定义数据卷
-
-
-#p0:proj0_toolbox 
   p0_v_mysql_master_1: 
   p0_v_mysql_slave_1: 
   p0_v_redis_master_1: 
   p0_v_redis_slave_1:
-  p0_v_track_master_1:
-  p0_v_track_slave_1:
+  p0_v_tracker_master_1:
+  p0_v_tracker_slave_1:
   p0_v_storage_master_1:
   p0_v_storage_slave_1:
 
 networks: # 自定义网络(默认桥接), 不使用links通信
-
-#p0:proj0_toolbox
   p0_n_mysql_master_1:
     driver: bridge
   p0_n_redis_master_1: 
@@ -24,9 +19,6 @@ networks: # 自定义网络(默认桥接), 不使用links通信
     driver: bridge
 
 services:
-
-#p0:proj0_toolbox
-
   p0_s_redis_master_1:
     image: redis:6.2.5
     container_name: container_p0_s_redis_master_1
@@ -84,16 +76,16 @@ services:
     #restart: always
 
   p0_s_tracker_master_1:
-  image: delron/fastdfs
-  #restart: always
-  container_name: container_p0_s_tracker_master_1
-  volumes:
-    - p0_v_tracker_master_1:/var/fdfs
-  command: "tracker"
-  networks:
-    - p0_n_tracker_master_1
-  ports:
-    - "22120:22122"
+    image: delron/fastdfs
+    #restart: always
+    container_name: container_p0_s_tracker_master_1
+    volumes:
+      - p0_v_tracker_master_1:/var/fdfs
+    command: "tracker"
+    networks:
+      - p0_n_tracker_master_1
+    ports:
+      - "22120:22122"
 
   p0_s_storage_master_1:
     image: delron/fastdfs
@@ -107,7 +99,7 @@ services:
       - p0_n_tracker_master_1
     ports:
       - "23000:23000"
-      - "8880:8888"      #访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
+      - "8880:8888" # 访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
   
   p0_s_storage_slave_1:
     image: delron/fastdfs
@@ -121,5 +113,4 @@ services:
       - p0_n_tracker_master_1
     ports:
       - "33000:23000"
-      - "9880:8888"      #访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
-    
+      - "9880:8888" # 访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
