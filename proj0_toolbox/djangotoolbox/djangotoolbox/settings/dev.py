@@ -18,7 +18,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # 追加导包路径指向apps包
 # sys.path.insert(0, '/home/zym/Documents/projects/meiduo_project/meiduo_mall/meiduo_mall/apps')
-sys.path.insert(0, os.path.join(BASE_DIR, 'djangotoolbox/apps'))
+sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -209,11 +210,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# 配置静态文件加载路径
-STATICFILES_DIRS = [BASE_DIR / 'djangotoolbox/static']
+# 配置开发时静态文件加载路径
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # 设置STATIC ROOT 和 STATIC URL（注意，收集时的目录和开发时的存储目录（也是加载目录）是不同的，这点不同于媒体文件）
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = "/static/"
 
 # 设置MEDIA ROOT 和 MEDIA URL(请注意：这里meidia_root指定的目录是收集时的目录，因为它就是开发阶段的媒体默认存储目录，所以，收集时没有变化)
