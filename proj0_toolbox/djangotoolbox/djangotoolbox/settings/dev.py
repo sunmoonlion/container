@@ -59,7 +59,7 @@ ROOT_URLCONF = 'djangotoolbox.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'djangotoolbox/templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,10 +72,10 @@ TEMPLATES = [
     },
     {
         'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'djangotoolbox/jinja2_templates')],
+        'DIRS': [os.path.join(BASE_DIR, 'jinja2_templates')],
         'APP_DIRS': True,
         'OPTIONS': {
-            'environment': 'djangotoolbox.utils.jinja2_env.jinja2_environment',
+            'environment': 'utils.jinja2_env.jinja2_environment',
         },
     },
 ]
@@ -224,3 +224,6 @@ MEDIA_URL = "/media/"
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 指定自定义的用户模型类：值的语法 ==> '子应用.用户模型类'
+AUTH_USER_MODEL = 'users.User'

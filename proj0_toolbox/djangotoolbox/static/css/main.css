@@ -1,0 +1,116 @@
+/* 引入 reset.css */
+@import url('reset.css');
+
+/* Grid Container */
+.container {
+    display: grid;
+    grid-template-areas:
+        "header"
+        "nav"
+        "content"
+        "footer";
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: 200px 1fr;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    grid-area: header;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+/* Navigation */
+.nav {
+    grid-area: nav;
+    background-color: #555;
+    color: white;
+    padding: 10px;
+}
+
+/* Main Content */
+.content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+/* Register Form */
+.register_form {
+    width: 100%; /* Ensure form takes full width */
+    max-width: 400px; /* Limit form width for readability */
+}
+
+.register_form .form-group {
+    margin-bottom: 15px;
+}
+
+.register_form label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.register_form input[type="text"],
+.register_form input[type="email"],
+.register_form input[type="password"],
+.register_form input[type="checkbox"] {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.register_form button[type="submit"] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.register_form button[type="submit"]:hover {
+    background-color: #45a049;
+}
+
+.register_form .error {
+    color: red;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Footer */
+.footer {
+    grid-area: footer;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        grid-template-areas:
+            "header"
+            "nav"
+            "content"
+            "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto;
+    }
+
+    .nav {
+        order: -1; /* Move navigation to the top on small screens */
+    }
+}

@@ -1,0 +1,115 @@
+/* 引入 reset.css */
+@import url('reset.css');
+
+/* Grid Container */
+.container {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "nav nav"
+        "sidebar content"
+        "footer footer";
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: 200px 1fr;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    grid-area: header;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+/* Navigation */
+.nav {
+    grid-area: nav;
+    background-color: #555;
+    color: white;
+    padding: 10px;
+}
+
+/* Sidebar */
+.sidebar {
+    grid-area: sidebar;
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+
+/* Main Content */
+.content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+}
+
+/* 为 content 容器下的所有直接子项添加样式 */
+.content > * {
+    background-color: #eee; /* 设置背景颜色 */
+    padding: 10px; /* 设置内边距 */
+    border: 1px solid #ddd; /* 设置边框 */
+}
+
+/* .item 类样式 */
+.item {
+    background-color: #ddd; /* 设置背景颜色 */
+    padding: 15px; /* 设置内边距 */
+    margin: 10px; /* 设置外边距 */
+    border: 1px solid #ccc; /* 设置边框 */
+    border-radius: 5px; /* 设置圆角 */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* 设置阴影 */
+}
+
+
+/* 特定子项的样式 */
+.special-item {
+    background-color: #ff0; /* 特定子项的背景颜色 */
+    color: #000; /* 特定子项的文字颜色 */
+}
+
+/* 为第一个子项设置特殊样式 */
+.content > :first-child {
+    background-color: #ccc;
+}
+
+/* 为第二个子项设置特殊样式 */
+.content > :nth-child(2) {
+    background-color: #bbb;
+}
+
+/* 特定子项的样式 */
+#unique-item {
+    background-color: #ff0; /* 特定子项的背景颜色 */
+    color: #000; /* 特定子项的文字颜色 */
+}
+
+/* Footer */
+.footer {
+    grid-area: footer;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        grid-template-areas:
+            "header"
+            "nav"
+            "content"
+            "sidebar"
+            "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto auto;
+    }
+
+    .sidebar {
+        order: -1; /* Move sidebar to the top on small screens */
+    }
+}

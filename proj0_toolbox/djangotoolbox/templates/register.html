@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid and Flex Layout</title>
+  <link rel="stylesheet" href="css/main.css">
+</head>
+<body>
+  <div class="container">
+    <header class="header">Header</header>
+    <nav class="navbar">
+      <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="contact.html">Contact</a></li>
+          <li><a href="register.html">Register</a></li>
+      </ul>
+    </nav>
+    <main class="content">
+
+      <h2 class="text-center">Register</h2>
+      <form method="post" class="register_form" @submit.prevent="on_submit">
+        {% csrf_token %}
+
+          <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" v-model="username" placeholder="Username">
+              <div v-if="error_name" class="error">{{ error_name_message }}</div>
+          </div>
+          <div class="form-group">
+              <label for="email">Email</label>
+              <input type="email" v-model="email" placeholder="Email">
+              <div v-if="error_email" class="error">{{ error_email_message }}</div>
+          </div>
+          <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" v-model="password" placeholder="Password">
+              <div v-if="error_password" class="error">Password error</div>
+          </div>
+          <div class="form-group">
+              <label for="password2">Confirm Password</label>
+              <input type="password" v-model="password2" placeholder="Confirm Password">
+              <div v-if="error_password2" class="error">Password mismatch</div>
+          </div>
+          <div class="form-group">
+              <label for="mobile">Mobile</label>
+              <input type="text" v-model="mobile" placeholder="Mobile">
+              <div v-if="error_mobile" class="error">{{ error_mobile_message }}</div>
+          </div>
+          <div class="form-group">
+              <input type="checkbox" v-model="allow"> Agree to terms
+              <div v-if="error_allow" class="error">Please agree to terms</div>
+          </div>
+          <!-- Error messages for image code and SMS code can be added similarly -->
+          <!-- Submit button -->
+          <button type="submit">Register</button>
+      </form>
+    </main>
+    <footer class="footer">Footer</footer>
+  </div>
+</body>
+</html>

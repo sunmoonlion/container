@@ -1,4 +1,4 @@
-from jinja2 import Environment, FileSystemLoader
+from jinja2 import Environment
 from django.urls import reverse
 from django.contrib.staticfiles.storage import staticfiles_storage
 
