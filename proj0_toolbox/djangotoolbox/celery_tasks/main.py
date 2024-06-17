@@ -2,10 +2,10 @@ from celery import Celery
 import os
 
 # 读取django项目的配置
-os.environ["DJANGO_SETTINGS_MODULE"] = "meiduo_mall.settings.prod"
+os.environ["DJANGO_SETTINGS_MODULE"] = "djangotoolbox.settings.dev"
 
 # 创建Celery实例
-celery_app = Celery('meiduo')
+celery_app = Celery('djangotoolbox')
 
 # 加载配置
 celery_app.config_from_object('celery_tasks.config')
@@ -14,5 +14,4 @@ celery_app.config_from_object('celery_tasks.config')
 celery_app.autodiscover_tasks([
     'celery_tasks.sms',
     'celery_tasks.email_active',
-    'celery_tasks.static_file',
 ])

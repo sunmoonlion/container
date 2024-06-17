@@ -1,5 +1,5 @@
 # 定义任务
-from celery_tasks.sms.yuntongxun.ccp_sms import CCP
+from sms.ccp_sms import CCP
 from . import constants
 from celery_tasks.main import celery_app
 
@@ -13,5 +13,5 @@ def send_sms_code(mobile, sms_code):
     :param sms_code: 短信验证码
     :return: 成功：0 、 失败：-1
     """
-    send_ret = CCP().send_template_sms(mobile, [sms_code, constants.SMS_CODE_REDIS_EXPIRES // 60], constants.SEND_SMS_TEMPLATE_ID)
+    send_ret = CCP().send_template_sms(constants.SEND_SMS_TEMPLATE_ID, mobile, (sms_code, constants.SMS_CODE_EXPIRES))
     return send_ret
