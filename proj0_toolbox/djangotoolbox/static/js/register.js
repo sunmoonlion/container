@@ -1,4 +1,4 @@
-const { createApp, ref } = Vue;
+const { createApp, ref, onMounted } = Vue;
 
 const app = createApp({
     setup() {
@@ -9,6 +9,12 @@ const app = createApp({
         const password2 = ref('');
         const mobile = ref('');
         const allow = ref(false);
+        const image_code_url = ref('');
+        const uuid = ref('');
+        const image_code = ref('');
+        const sms_code_tip = ref('获取短信验证码'); 
+        const send_flag = ref(false);
+        const sms_code = ref('');
 
         // Validation states
         const error_name = ref(false);
@@ -17,72 +23,171 @@ const app = createApp({
         const error_password2 = ref(false);
         const error_mobile = ref(false);
         const error_allow = ref(false);
+        const error_image_code = ref(false);
+        const error_sms_code = ref(false);
 
         // Error messages
         const error_name_message = ref('');
-        const error_email_message = ref('');
-        const error_password_message = ref('');
-        const error_password2_message = ref('');
         const error_mobile_message = ref('');
         const error_allow_message = ref('');
+        const error_image_code_message = ref('');
+        const error_sms_code_message = ref('');
 
         // Methods
+        const send_sms_code = () => {
+            if (send_flag.value) {
+                return;
+            }
+            send_flag.value = true;
+
+            check_mobile();
+            check_image_code();
+            if (error_mobile.value || error_image_code.value) {
+                send_flag.value = false;
+                return;
+            }
+
+            const url = `/sms_codes/${mobile.value}/?image_code=${image_code.value}&uuid=${uuid.value}`;
+            axios.get(url, { responseType: 'json' })
+                .then(response => {
+                    if (response.data.code === '0') {
+                        let num = 60;
+                        const t = setInterval(() => {
+                            if (num === 1) {
+                                clearInterval(t);
+                                sms_code_tip.value = '获取短信验证码';
+                                generate_image_code();
+                                send_flag.value = false;
+                            } else {
+                                num -= 1;
+                                sms_code_tip.value = `${num}秒`;
+                            }
+                        }, 1000);
+                    } else {
+                        if (response.data.code === '4001') {
+                            error_image_code_message.value = response.data.errmsg;
+                            error_image_code.value = true;
+                        } else {
+                            error_sms_code_message.value = response.data.errmsg;
+                            error_sms_code.value = true;
+                        }
+                        send_flag.value = false;
+                    }
+                })
+                .catch(error => {
+                    console.log(error.response);
+                    send_flag.value = false;
+                });
+        };
+
+        const generate_image_code = () => {
+            uuid.value = generateUUID();
+            image_code_url.value = `/image_codes/${uuid.value}/`;
+        };
+
         const check_username = () => {
-            // Validation logic for username
-            // Update error_name and error_name_message accordingly
+            const re = /^[a-zA-Z0-9_-]{5,20}$/;
+            if (re.test(username.value)) {
+                error_name.value = false;
+            } else {
+                error_name_message.value = '请输入5-20个字符的用户名';
+                error_name.value = true;
+            }
+
+            if (!error_name.value) {
+                const url = `/usernames/${username.value}/count/`;
+                axios.get(url, { responseType: 'json' })
+                    .then(response => {
+                        if (response.data.count === 1) {
+                            error_name_message.value = '用户名已存在';
+                            error_name.value = true;
+                        } else {
+                            error_name.value = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error.response);
+                    });
+            }
         };
 
         const check_email = () => {
-            // Validation logic for email
-            // Update error_email and error_email_message accordingly
+            const re = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+            if (re.test(email.value)) {
+                error_email.value = false;
+            } else {
+                error_email.value = true;
+            }
         };
 
         const check_password = () => {
-            // Validation logic for password
-            // Update error_password and error_password_message accordingly
+            const re = /^[0-9A-Za-z]{8,20}$/;
+            if (re.test(password.value)) {
+                error_password.value = false;
+            } else {
+                error_password.value = true;
+            }
         };
 
         const check_password2 = () => {
-            // Validation logic for confirm password
-            // Update error_password2 and error_password2_message accordingly
+            if (password.value !== password2.value) {
+                error_password2.value = true;
+            } else {
+                error_password2.value = false;
+            }
         };
 
         const check_mobile = () => {
-            // Validation logic for mobile number
-            // Update error_mobile and error_mobile_message accordingly
+            const re = /^1[3-9]\d{9}$/;
+            if (re.test(mobile.value)) {
+                error_mobile.value = false;
+            } else {
+                error_mobile_message.value = '您输入的手机号格式不正确';
+                error_mobile.value = true;
+            }
+
+            if (!error_mobile.value) {
+                const url = `/mobiles/${mobile.value}/count/`;
+                axios.get(url, { responseType: 'json' })
+                    .then(response => {
+                        if (response.data.count === 1) {
+                            error_mobile_message.value = '手机号已存在';
+                            error_mobile.value = true;
+                        } else {
+                            error_mobile.value = false;
+                        }
+                    })
+                    .catch(error => {
+                        console.log(error.response);
+                    });
+            }
         };
 
         const check_allow = () => {
-            // Validation logic for terms agreement
-            // Update error_allow and error_allow_message accordingly
+            if (!allow.value) {
+                error_allow.value = true;
+            } else {
+                error_allow.value = false;
+            }
         };
 
-        const on_submit = () => {
-            // Perform all validations
+        const on_submit = (event) => {
             check_username();
-            check_email();
             check_password();
             check_password2();
             check_mobile();
             check_allow();
 
-            // If there are any errors, prevent form submission
-            if (error_name.value || error_email.value || error_password.value || error_password2.value || error_mobile.value || error_allow.value) {
-                return;
+            if (error_name.value || error_password.value || error_password2.value || error_mobile.value || error_allow.value) {
+                event.preventDefault();
             }
-
-            // Otherwise, submit the form or perform additional logic
-            // Example: make HTTP request to register user
-            // axios.post('/register', { username.value, email.value, password.value, mobile.value })
-            //     .then(response => {
-            //         // Handle success
-            //     })
-            //     .catch(error => {
-            //         // Handle error
-            //     });
         };
 
-        // Return reactive data and methods
+        // 在页面加载完执行的逻辑
+        onMounted(() => {
+            generate_image_code();
+        });
+
         return {
             username,
             email,
@@ -90,21 +195,36 @@ const app = createApp({
             password2,
             mobile,
             allow,
+            image_code_url,
+            uuid,
+            image_code,
+            sms_code_tip,
+            send_flag,
+            sms_code,
             error_name,
             error_email,
             error_password,
             error_password2,
             error_mobile,
             error_allow,
+            error_image_code,
+            error_sms_code,
             error_name_message,
-            error_email_message,
-            error_password_message,
-            error_password2_message,
             error_mobile_message,
             error_allow_message,
-            on_submit,
+            error_image_code_message,
+            error_sms_code_message,
+            send_sms_code,
+            generate_image_code,
+            check_username,
+            check_email,
+            check_password,
+            check_password2,
+            check_mobile,
+            check_allow,
+            on_submit
         };
-    },
+    }
 });
 
 app.config.compilerOptions.delimiters = ['[[', ']]'];

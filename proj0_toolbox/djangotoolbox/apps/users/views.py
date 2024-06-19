@@ -1,9 +1,40 @@
+from django.shortcuts import render, redirect
+from django.views import View
 from django import http
 from django.db import DatabaseError
 import re, json, logging
-from django.shortcuts import render
-from django.views import View
+from django.db import DatabaseError
+from django.urls import reverse
+from django.contrib.auth import login, authenticate, logout
+from django_redis import get_redis_connection
+from utils.response_code import RETCODE
 from users.models import User
+
+class MobileCountView(View):
+    """判断手机号是否重复注册"""
+
+    def get(self, request, mobile):
+        """
+        :param mobile: 手机号
+        :return: JSON
+        """
+        count = User.objects.filter(mobile=mobile).count()
+        return http.JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK', 'count': count})
+
+
+class UsernameCountView(View):
+    """判断用户名是否重复注册"""
+
+    def get(self, request, username):
+        """
+        :param username: 用户名
+        :return: JSON
+        """
+        # 实现主体业务逻辑：使用username查询对应的记录的条数(filter返回的是满足条件的结果集)
+        count = User.objects.filter(username=username).count()
+        # 响应结果
+        return http.JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK', 'count': count})
+
 
 class RegisterView(View):
     """用户注册"""
@@ -46,8 +77,8 @@ class RegisterView(View):
         # if sms_code_client != sms_code_server.decode():
         #     return render(request, 'register.html', {'sms_code_errmsg': '输入短信验证码有误'})
         # # 判断是否勾选用户协议
-        if allow != 'on':
-            return http.HttpResponseForbidden('请勾选用户协议')
+        # if allow != 'on':
+        #     return http.HttpResponseForbidden('请勾选用户协议')
 
         # 保存注册数据：是注册业务的核心
         # return render(request, 'register.html', {'register_errmsg': '注册失败'})
@@ -56,4 +87,15 @@ class RegisterView(View):
         except DatabaseError:
             return render(request, 'register.html', {'register_errmsg':'注册失败'})
 
-        
+        # 实现状态保持
+        login(request, user)
+
+        # 响应结果:重定向到首页
+        response = redirect(reverse('contents:index'))
+
+        # 为了实现在首页的右上角展示用户名信息，我们需要将用户名缓存到cookie中
+        # response.set_cookie('key', 'val', 'expiry')
+        response.set_cookie('username', user.username, max_age=3600 * 24 * 15)
+
+        # 响应结果:重定向到首页
+        return response

@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'users',
     'contents',
     'verifications',
-    
 ]
 
 MIDDLEWARE = [
@@ -61,8 +60,16 @@ ROOT_URLCONF = 'djangotoolbox.urls'
 
 TEMPLATES = [
     {
+        'BACKEND': 'django.template.backends.jinja2.Jinja2',
+        'DIRS': [BASE_DIR/'templates'],
+        'APP_DIRS': True,
+        'OPTIONS': {
+            'environment': 'utils.jinja2_env.jinja2_environment',
+        },
+    },
+    {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -72,15 +79,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
             ],
         },
-    },
-    {
-        'BACKEND': 'django.template.backends.jinja2.Jinja2',
-        'DIRS': [os.path.join(BASE_DIR, 'jinja2_templates')],
-        'APP_DIRS': True,
-        'OPTIONS': {
-            'environment': 'utils.jinja2_env.jinja2_environment',
-        },
-    },
+    }
 ]
 
 WSGI_APPLICATION = 'djangotoolbox.wsgi.application'
@@ -214,7 +213,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
 # 配置开发时静态文件加载路径
-STATICFILES_DIRS = [BASE_DIR / 'static']
+STATICFILES_DIRS = [BASE_DIR, 'static']
 
 # 设置STATIC ROOT 和 STATIC URL（注意，收集时的目录和开发时的存储目录（也是加载目录）是不同的，这点不同于媒体文件）
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
