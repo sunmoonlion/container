@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-# refer to `https://bitbucket.org/akorn/wheezy.captcha`
-
 import random
 import string
 import os.path
@@ -58,7 +56,6 @@ class Captcha(object):
     def __init__(self):
         self._bezier = Bezier()
         self._dir = os.path.dirname(__file__)
-        # self._captcha_path = os.path.join(self._dir, '..', 'static', 'captcha')
 
     @staticmethod
     def instance():
@@ -67,7 +64,6 @@ class Captcha(object):
         return Captcha._instance
 
     def initialize(self, width=200, height=75, color=None, text=None, fonts=None):
-        # self.image = Image.new('RGB', (width, height), (255, 255, 255))
         self._text = text if text else random.sample(string.ascii_uppercase + string.ascii_uppercase + '3456789', 4)
         self.fonts = fonts if fonts else \
             [os.path.join(self._dir, 'fonts', font) for font in ['Arial.ttf', 'Georgia.ttf', 'actionj.ttf']]
@@ -83,8 +79,6 @@ class Captcha(object):
         if opacity is None:
             return red, green, blue
         return red, green, blue, opacity
-
-    # draw image
 
     def background(self, image):
         Draw(image).rectangle([(0, 0), image.size], fill=self.random_color(238, 255))
@@ -129,7 +123,8 @@ class Captcha(object):
         char_images = []
         for c in self._text:
             font = random.choice(fonts)
-            c_width, c_height = draw.textsize(c, font=font)
+            bbox = draw.textbbox((0, 0), c, font=font)
+            c_width, c_height = bbox[2] - bbox[0], bbox[3] - bbox[1]
             char_image = Image.new('RGB', (c_width, c_height), (0, 0, 0))
             char_draw = Draw(char_image)
             char_draw.text((0, 0), c, font=font, fill=color)
@@ -151,7 +146,6 @@ class Captcha(object):
             offset += int(c_width * squeeze_factor)
         return image
 
-    # draw text
     @staticmethod
     def warp(image, dx_factor=0.27, dy_factor=0.21):
         width, height = image.size

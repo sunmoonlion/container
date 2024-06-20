@@ -1,5 +1,5 @@
 # 定义任务
-from sms.ccp_sms import CCP
+from .ccp_sms import CCP
 from . import constants
 from celery_tasks.main import celery_app
 

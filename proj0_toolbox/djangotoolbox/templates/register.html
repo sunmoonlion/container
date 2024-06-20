@@ -24,13 +24,10 @@
       <a href="register.html">Register</a>
     </nav>
     <aside class="sidebar">
-      <div class="reg_l">
         <a href="index.html" class="reg_logo"><img src="{{ static('images/cat.jpg') }}"></a>
-			  <div class="reg_slogan"> 欢迎光临</div>
-      </div>
+			  <div class="reg_slogan"> 欢迎光临!</div>
     </aside>
     <main class="content">
-      <!-- <div class="reg_r"> -->
         <div class="reg_title">
           <h1>用户注册</h1>
           <a href="login.html">登录</a>
@@ -67,41 +64,41 @@
             <li>
               <label>短信验证码:</label>
               <input type="text" v-model="sms_code" @blur="check_sms_code" name="sms_code" id="msg_code" class="msg_input">
-              <a @click="send_sms_code" class="get_msg_code">[[ sms_code_tip ]]</a>
+              <a href="#" @click.prevent="send_sms_code" class="get_msg_code"> [[ sms_code_tip ]] </a>
               <span class="error_tip" v-show="error_sms_code">[[ error_sms_code_message ]]</span>
-          {% if sms_code_errmsg %}
-              <span class="error_tip">{{ sms_code_errmsg }}</span>
-          {% endif %}
-      </li>
-        <li class="agreement">
-          <input type="checkbox" v-model="allow" @change="check_allow" name="allow" id="allow">
-          <label>同意”美多商城用户使用协议“</label>
-          <span class="error_tip" v-show="error_allow">请勾选用户协议</span>
+              {% if sms_code_errmsg %}
+                  <span class="error_tip">{{ sms_code_errmsg }}</span>
+              {% endif %}
+          </li>
+          
+            <li class="agreement">
+              <input type="checkbox" v-model="allow" @change="check_allow" name="allow" id="allow">
+              <label>同意”美多商城用户使用协议“</label>
+              <span class="error_tip" v-show="error_allow">请勾选用户协议</span>
 
-                        {% if register_errmsg %}
-                            <span class="error_tip">{{ register_errmsg }}</span>
-                        {% endif %}
-                    </li>
-        <li class="reg_sub">
-          <input type="submit" value="注 册">
-        </li>
-      </ul>				
-    </form>
-  <!-- </div>    -->
+              {% if register_errmsg %}
+                  <span class="error_tip">{{ register_errmsg }}</span>
+              {% endif %}
+            </li>
+            <li class="reg_sub">
+              <input type="submit" value="注 册">
+            </li>
+          </ul>				
+        </form>
     </main>
     <footer class="footer">
-  <div class="foot_link">
-    <a href="#">关于我们</a>
-    <span>|</span>
-    <a href="#">联系我们</a>
-    <span>|</span>
-    <a href="#">招聘人才</a>
-    <span>|</span>
-    <a href="#">友情链接</a>		
-  </div>
-  <p>CopyRight © 2022 上海ai股份有限公司 All Rights Reserved</p>
-  <p>电话：021-****888    沪ICP备*******8号</p>
-    </footer>
+      <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>		
+      </div>
+      <p>CopyRight © 2022 上海ai股份有限公司 All Rights Reserved</p>
+      <p>电话：021-****888    沪ICP备*******8号</p>
+        </footer>
   </div>
 </body>
 </html>

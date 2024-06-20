@@ -21,7 +21,12 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('users.urls')),
+    # users
+    path('', include('users.urls',namespace='users')),
+    # contents
+    path('', include('contents.urls',namespace='contents')),
+    # verifications
+    path(r'', include('verifications.urls')),
 ]
 # 开发时访问媒体资源，这不同于静态文件的访问机制（静态文件通过配置staticfiles_dirs来查找静态文件）
 if settings.DEBUG:

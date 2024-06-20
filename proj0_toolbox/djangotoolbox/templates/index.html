@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid and Flex Layout</title>
+  <!-- 引入主题样式或自定义样式表 -->
+  <link rel="stylesheet" href="{{ static('css/main.css') }}"> 
+  <!-- 引入 Vue 3 -->
+  <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
+  <!-- Axios for HTTP requests -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+  <!-- Your custom JavaScript file -->
+  <script src="{{ static('js/custom.js') }}" defer></script>
+</head>
+<body>
+  <div class="container">
+    <header class="header">
+      Header
+    </header>
+    <nav class="nav">
+      <ul>
+        <li><a href="content.html">Home</a></li>
+        <li><a href="register.html">Register</a></li>
+    </ul>
+    </nav>
+    <aside class="sidebar">
+      Sidebar
+    </aside>
+    <main class="content">
+        <div class="item special-item">Item 1</div>
+        <div class="item">Item 2</div>
+        <div class="item" id="unique-item">Item 3</div>
+    </main>
+    <footer class="footer">
+      <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>		
+      </div>
+      <p>CopyRight © 2022 上海ai股份有限公司 All Rights Reserved</p>
+      <p>电话：021-****888    沪ICP备*******8号</p>
+    </footer>
+  </div>
+</body>
+</html>

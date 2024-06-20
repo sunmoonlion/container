@@ -41,16 +41,17 @@
     grid-area: sidebar;
     background-color: #f0f0f0;
     padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: flex-start;
+    gap: 20px;
 }
 
 /* Register Form */
 
-.reg_l {    
-    width: 300px;
-}
-
-.reg_logo{width:200px;height:76px;float:right;margin-right:30px;}
-.reg_slogan{width:300px;height:30px;float:right;text-align:right;font-size:22px;color:#fe0000;margin:20px 30px 0 0;}
+.reg_logo{width:200px;height:76px;}
+.reg_slogan{width:30px;height:30px;font-size:22px;color:#fe0000;}
 
 /* Main Content */
 .content {
@@ -61,10 +62,19 @@
     align-items: center;
     background-color: #f9f9f9;
     padding: 20px;
+    gap: 30px;
 }
 
 /* Register Form */
 
+.reg_title {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    
+}
 .reg_form li {
     display: flex;
     align-items: center;
@@ -72,7 +82,7 @@
 }
 
 .reg_form li label {
-    flex: 0 0 300px; /* 固定 label 的宽度 */
+    flex: 0 0 100px; /* 固定 label 的宽度 */
     text-align: right;
     margin-right: 10px; /* 调整 label 和 input 之间的间距 */
 }
@@ -83,6 +93,19 @@
     padding: 5px; /* 调整 input 的内边距 */
     border: 1px solid #ccc;
 }
+
+.reg_form li .get_msg_code {
+    white-space: nowrap;
+}
+
+.reg_form li.agreement input{
+    width:15px;height:15px;
+}
+.reg_form li.agreement label{
+    width:350px;
+    white-space: nowrap; /* 文字不换行 */
+}
+.reg_form li.reg_sub input{width:380px;height:40px;background-color:#ff5757;font-size:18px;color:#fff;font-family:'Microsoft Yahei';cursor:pointer;}
 
 
 
@@ -108,6 +131,7 @@
         grid-template-areas:
             "header"
             "nav"
+            "sidebar"
             "content"
             "footer";
         grid-template-columns: 1fr;
