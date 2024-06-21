@@ -3,7 +3,6 @@
 注意：下面的创建文件可以用ini.sh在命令行一键创建！！！
 
 
-
 You: 
 
 好的，我理解了。下面是完整的步骤，从创建 `celery.service` 文件开始，包括创建目录和设置权限，直到重启和管理服务。创建 `celery.service` 文件 
@@ -11,7 +10,7 @@ You:
 1. **创建 `celery.service` 文件：** 打开终端，并使用编辑器（如 `nano` 或 `vim`）创建 `celery.service` 文件：
 
 ```bash
-sudo nano /etc/systemd/system/celery.service
+sudo vi /etc/systemd/system/celery.service
 ```
 
 2. **将以下内容粘贴到文件中：** 
@@ -26,11 +25,13 @@ Type=forking
 User=zym
 Group=zym
 WorkingDirectory=/home/zym/container/proj0_toolbox/djangotoolbox
-ExecStart=/home/zym/anaconda3/envs/django/bin/celery multi start worker1 -A celery_tasks.main -l info --logfile=/var/log/celery/%n%I.log
+ExecStartPre=/usr/bin/sudo /bin/mkdir -p /var/run/celery
+ExecStartPre=/usr/bin/sudo /bin/chown zym:zym /var/run/celery
+ExecStart=/home/zym/anaconda3/envs/django/bin/celery multi start worker1 -A celery_tasks.main -l info
 ExecStop=/home/zym/anaconda3/envs/django/bin/celery multi stopwait worker1
 ExecReload=/home/zym/anaconda3/envs/django/bin/celery multi restart worker1 -A celery_tasks.main -l info
 Environment=PYTHONPATH=/home/zym/container/proj0_toolbox/djangotoolbox
-Environment=DJANGO_SETTINGS_MODULE=my_django_project.settings
+Environment=DJANGO_SETTINGS_MODULE=djangotoolbox.settings.dev
 
 [Install]
 WantedBy=multi-user.target
@@ -47,19 +48,6 @@ WantedBy=multi-user.target
 
 3. **保存并关闭文件：** 在 `nano` 编辑器中按下 `Ctrl + X`，输入 `Y` 保存修改，然后按 `Enter` 确认文件名。
 
-### 创建日志目录并设置权限 
-
-1. **创建 `celery` 日志目录：** 使用以下命令创建 `celery` 日志目录：
-
-```bash
-sudo mkdir -p /var/log/celery/
-```
-
-2. **设置目录所有者和组：** 将 `celery` 日志目录的所有者设置为 `zym` 用户和 `zym` 组：
-
-```bash
-sudo chown zym:zym /var/log/celery/
-```
 
 重新加载 `systemd` 并启动服务 
 
@@ -105,7 +93,7 @@ sudo systemctl enable celery.service
 
 ```bash
 sudo systemctl stop celery.service
-```
+```s
 
   - **重启 Celery 服务：** 
 
