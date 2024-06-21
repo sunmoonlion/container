@@ -50,7 +50,8 @@ class SMSCodeView(View):
             return http.JsonResponse({'code': RETCODE.IMAGECODEERR, 'errmsg': '输入图形验证码有误'})
 
         # 生成短信验证码：随机4位数字(云通信测试需4为数字，生产环境可自主设置)
-        sms_code = '%04d' % random.randint(0, 999999)
+        # 生成一个 1000 到 9999 之间的随机整数
+        sms_code = '%04d' % random.randint(1000, 9999)
         logger.info(sms_code) # 手动的输出日志，记录短信验证码
 
         # # 保存短信验证码
@@ -61,8 +62,13 @@ class SMSCodeView(View):
         # 创建redis管道
         pl = redis_conn.pipeline()
         # 将命令添加到队列中
-        # 保存短信验证码
-        pl.setex('sms_%s' % mobile, constants.SMS_CODE_REDIS_EXPIRES, sms_code)
+        try:
+            pl.setex(f'sms_{mobile}', constants.SMS_CODE_REDIS_EXPIRES, sms_code)
+        except Exception as e:
+            logger.error(f"Error setting SMS code: {e}")
+            # 处理异常，例如返回错误信息给客户端或者进行其他适当的处理
+            return http.JsonResponse({'code': RETCODE.DBERR, 'errmsg': '保存短信验证码失败'})
+
         # 保存发送短信验证码的标记
         pl.setex('send_flag_%s' % mobile, constants.SEND_SMS_CODE_INTERVAL, 1)
         # 执行

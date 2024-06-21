@@ -1,0 +1,124 @@
+
+
+注意：下面的创建文件可以用ini.sh在命令行一键创建！！！
+
+
+
+You: 
+
+好的，我理解了。下面是完整的步骤，从创建 `celery.service` 文件开始，包括创建目录和设置权限，直到重启和管理服务。创建 `celery.service` 文件 
+
+1. **创建 `celery.service` 文件：** 打开终端，并使用编辑器（如 `nano` 或 `vim`）创建 `celery.service` 文件：
+
+```bash
+sudo nano /etc/systemd/system/celery.service
+```
+
+2. **将以下内容粘贴到文件中：** 
+
+```ini
+[Unit]
+Description=Celery Service
+After=network.target
+
+[Service]
+Type=forking
+User=zym
+Group=zym
+WorkingDirectory=/home/zym/container/proj0_toolbox/djangotoolbox
+ExecStart=/home/zym/anaconda3/envs/django/bin/celery multi start worker1 -A celery_tasks.main -l info --logfile=/var/log/celery/%n%I.log
+ExecStop=/home/zym/anaconda3/envs/django/bin/celery multi stopwait worker1
+ExecReload=/home/zym/anaconda3/envs/django/bin/celery multi restart worker1 -A celery_tasks.main -l info
+Environment=PYTHONPATH=/home/zym/container/proj0_toolbox/djangotoolbox
+Environment=DJANGO_SETTINGS_MODULE=my_django_project.settings
+
+[Install]
+WantedBy=multi-user.target
+```
+
+  - **说明：**  
+    - `User` 和 `Group` 设置为 `zym`，确保 Celery 运行时使用指定的用户和组。
+
+    - `WorkingDirectory` 设置为 Django 项目的根目录，这是 Celery 启动时的工作目录。
+
+    - `ExecStart` 定义了 Celery 启动命令，包括使用 `celery multi` 启动 worker，并指定日志文件路径。
+
+    - `Environment` 设置了 Python 路径和 Django 设置模块，确保 Celery 可以正确加载 Django 环境。
+
+3. **保存并关闭文件：** 在 `nano` 编辑器中按下 `Ctrl + X`，输入 `Y` 保存修改，然后按 `Enter` 确认文件名。
+
+### 创建日志目录并设置权限 
+
+1. **创建 `celery` 日志目录：** 使用以下命令创建 `celery` 日志目录：
+
+```bash
+sudo mkdir -p /var/log/celery/
+```
+
+2. **设置目录所有者和组：** 将 `celery` 日志目录的所有者设置为 `zym` 用户和 `zym` 组：
+
+```bash
+sudo chown zym:zym /var/log/celery/
+```
+
+重新加载 `systemd` 并启动服务 
+
+1. **重新加载 `systemd` 配置文件：** 执行以下命令重新加载 `systemd` 配置，使新创建的 `celery.service` 文件生效：
+
+```bash
+sudo systemctl daemon-reload
+```
+
+2. **启动 Celery 服务：** 
+   使用以下命令启动 Celery 服务：
+
+
+```bash
+sudo systemctl start celery.service
+```
+
+3. **检查服务状态：** 
+   确保服务已成功启动，可以使用以下命令检查服务状态：
+
+
+```bash
+sudo systemctl status celery.service
+```
+
+如果一切正常，您应该看到 `Active: active (running)` 的状态。
+
+### 设置自启动和其他管理 
+
+1. **设置自启动：** 
+   若要确保系统重启后 Celery 服务自动启动，使用以下命令设置：
+
+
+```bash
+sudo systemctl enable celery.service
+```
+
+现在，Celery 将在系统启动时自动启动。
+
+2. **其他管理命令：**  
+
+  - **停止 Celery 服务：** 
+
+```bash
+sudo systemctl stop celery.service
+```
+
+  - **重启 Celery 服务：** 
+
+```bash
+sudo systemctl restart celery.service
+```
+
+  - **禁用自启动：** 
+
+```bash
+sudo systemctl disable celery.service
+```
+
+### 保存配置 
+
+确保保存您创建的 `celery.service` 文件和执行的所有命令输出，以便今后参考和管理 Celery 服务。这样就完成了完整的步骤，从创建 `celery.service` 文件、设置目录和权限，到重新加载 `systemd` 并启动 Celery 服务。如果您有任何疑问或需要进一步帮助，请随时告知！

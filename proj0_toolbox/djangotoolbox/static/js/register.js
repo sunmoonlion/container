@@ -5,7 +5,7 @@ const app = createApp({
         // Reactive state
         const username = ref('');
         const email = ref('');
-        const password = ref();
+        const password = ref('');  // 修正
         const password2 = ref('');
         const mobile = ref('');
         const allow = ref(false);
@@ -83,10 +83,7 @@ const app = createApp({
         const generate_image_code = () => {
             uuid.value = generateUUID();
             image_code_url.value = `/image_codes/${uuid.value}/`;
-            console.log('New UUID:', uuid.value);
-            console.log('New Image Code URL:', image_code_url.value);
         };
-        
 
         const check_username = () => {
             const re = /^[a-zA-Z0-9_-]{5,20}$/;
@@ -168,20 +165,21 @@ const app = createApp({
 
         // 校验图形验证码吗
         const check_image_code = () => {
-            if (image_code.length != 4) {
-                error_image_code_message = '请输入图形验证码';
-                error_image_code = true;
+            if (image_code.value.length !== 4) {
+                error_image_code_message.value = '请输入图形验证码';
+                error_image_code.value = true;
             } else {
-                error_image_code = false;
+                error_image_code.value = false;
             }
         };
+
         // 校验短信验证码
         const check_sms_code = () => {
-            if(sms_code.length != 6){
-                error_sms_code_message = '请填写短信验证码';
-                error_sms_code = true;
+            if (sms_code.value.length !== 4) {
+                error_sms_code_message.value = '请填写短信验证码';
+                error_sms_code.value = true;
             } else {
-                error_sms_code = false;
+                error_sms_code.value = false;
             }
         };
 
@@ -202,7 +200,7 @@ const app = createApp({
             check_sms_code();
             check_allow();
 
-            if (error_name.value || error_password.value || error_password2.value || error_mobile.value || error_allow.value || error_image_code || error_sms_code) {
+            if (error_name.value || error_password.value || error_password2.value || error_mobile.value || error_allow.value || error_image_code.value || error_sms_code.value) { // 修正拼写错误
                 event.preventDefault();
             }
         };
@@ -253,6 +251,6 @@ const app = createApp({
     }
 });
 
-app.config.compilerOptions.delimiters = ['[[',']]'];
+app.config.compilerOptions.delimiters = ['[[', ']]'];
 
 app.mount('#app');

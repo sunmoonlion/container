@@ -110,21 +110,21 @@ DATABASES = {
 CACHES = {
     "default": {  # 默认
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://47.103.135.26:6379/0",
+        "LOCATION": "redis://47.103.135.26:6370/0",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "session": {  # session
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://47.103.135.26:6379/1",
+        "LOCATION": "redis://47.103.135.26:6370/1",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
     },
     "verify_code": {  # 验证码
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://47.103.135.26:6379/2",
+        "LOCATION": "redis://47.103.135.26:6370/2",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }

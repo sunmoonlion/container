@@ -11,6 +11,7 @@ celery_app = Celery('djangotoolbox')
 celery_app.config_from_object('celery_tasks.config')
 
 # 加载可用的任务
+# 列表传入文件夹就可以，会自动寻找tasks
 celery_app.autodiscover_tasks([
     'celery_tasks.sms',
     'celery_tasks.email_active',
