@@ -106,50 +106,6 @@ login_form li input {
 
 
 
-/* Register Form */
-
-.reg_title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    
-}
-.reg_form li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px; /* 调整项目之间的间距 */
-}
-
-.reg_form li label {
-    flex: 0 0 100px; /* 固定 label 的宽度 */
-    text-align: right;
-    margin-right: 10px; /* 调整 label 和 input 之间的间距 */
-}
-
-.reg_form li input {
-    flex: 1; /* 填充剩余空间 */
-    height: 30px;
-    padding: 5px; /* 调整 input 的内边距 */
-    border: 1px solid #ccc;
-}
-
-.reg_form li .get_msg_code {
-    white-space: nowrap;
-}
-
-.reg_form li.agreement input{
-    width:15px;height:15px;
-}
-.reg_form li.agreement label{
-    width:350px;
-    white-space: nowrap; /* 文字不换行 */
-}
-.reg_form li.reg_sub input{width:380px;height:40px;background-color:#ff5757;font-size:18px;color:#fff;font-family:'Microsoft Yahei';cursor:pointer;}
-
-
-
 /* Footer */
 .footer {
     grid-area: footer;

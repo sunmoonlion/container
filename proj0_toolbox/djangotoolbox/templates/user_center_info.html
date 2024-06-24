@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid and Flex Layout</title>
+  <!-- 引入主题样式或自定义样式表 -->
+  <link rel="stylesheet" href="{{ static('css/user_center_info.css') }}"> 
+  <!-- 引入 Vue 3 -->
+  <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
+  <!-- Axios for HTTP requests -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
+  <!-- Your custom JavaScript file -->
+  <script >
+    const username = "{{ username }}";
+    const mobile = "{{ mobile }}";
+    const emailValue = "{{ email }}";
+    const emailActiveValue = "{{ email_active }}";
+  </script>
+    
+  <script src="{{ static('js/common.js') }}" defer></script>
+  <script src="{{ static('js/user_center_info.js') }}" defer></script>
+</head>
+<body>
+  <div class="container" id="app">
+    <header class="header">
+      <div class="header-left">
+        欢迎欢迎！
+      </div>
+      <div class="header-right">
+        <template v-if="!loggedIn">
+          <a href="{{url('users:register')}}">>注册</a>
+          <a href="{{url('users:login')}}">登录</a>
+          <a href="{{url('users:info')}}">>用户中心</a>
+        </template>
+        <template v-else>
+          <span>您好，{{ username }}</span>
+          <a href="{{url('users:logout')}}">>退出</a>
+          <a href="{{url('users:info')}}">>用户中心</a>
+        </template>
+      </div>
+    </header>
+    <nav class="nav">
+        <li><a href="content.html">Home</a></li>
+        <li><a href="register.html">Register</a></li>
+    </nav>
+    <aside class="sidebar">
+      <h3>用户中心</h3>
+			<ul>
+				<li><a href="{{ url('users:info') }}" class="active">· 个人信息</a></li>
+                <li><a href="user_center_order.html">· 全部订单</a></li>
+				<li><a href="user_center_pass.html">· 修改密码</a></li>
+			</ul>
+    </aside>
+    <main class="content">
+        <h3 class="user_info_base">基本信息</h3>
+        <ul class="user_info_list">
+            <li><span>用户名：</span>[[ username ]]</li>
+            <li><span>联系方式：</span>[[ mobile ]]</li>
+            <li>
+                <span>Email：</span>
+                <div v-if="set_email">
+                    <input v-model="email" @blur="check_email" type="email" name="email" class="email">
+                    <input @click="save_email" type="button" name="" value="保 存">
+                    <input @click="cancel_email" type="reset" name="" value="取 消">
+                    <div v-show="error_email" class="error_email_tip">邮箱格式错误</div>
+                </div>
+                <div v-else>
+                    <input v-model="email" type="email" name="email" class="email" readonly>
+                    <div v-if="email_active">
+                        已验证
+                    </div>
+                    <div v-else>
+                        待验证<input @click="save_email" :disabled="send_email_btn_disabled" type="button" :value="send_email_tip">
+                    </div>
+                </div>
+            </li>
+        </ul> 
+    </main>
+    <footer class="footer">
+      <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>		
+      </div>
+      <p>CopyRight © 2022 上海ai股份有限公司 All Rights Reserved</p>
+      <p>电话：021-****888    沪ICP备*******8号</p>
+    </footer>
+  </div>
+</body>
+</html>

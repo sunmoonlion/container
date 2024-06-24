@@ -5,32 +5,47 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grid and Flex Layout</title>
   <!-- 引入主题样式或自定义样式表 -->
-  <link rel="stylesheet" href="{{ static('css/main.css') }}"> 
+  <link rel="stylesheet" href="{{ static('css/index.css') }}">
   <!-- 引入 Vue 3 -->
   <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
   <!-- Axios for HTTP requests -->
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
   <!-- Your custom JavaScript file -->
-  <script src="{{ static('js/custom.js') }}" defer></script>
+  <script src="{{ static('js/common.js') }}" defer></script>
+  <script src="{{ static('js/index.js') }}" defer></script>
 </head>
 <body>
-  <div class="container">
+  <div id="app" class="container">
     <header class="header">
-      Header
+      <div class="header-left">
+        欢迎欢迎！
+      </div>
+      <div class="header-right">
+        <template v-if="!loggedIn">
+          <a href="{{url('users:register')}}">>注册</a>
+          <a href="{{url('users:login')}}">登录</a>
+          <a href="{{url('users:info')}}">>用户中心</a>
+        </template>
+        <template v-else>
+          <span>您好，{{ username }}</span>
+          <a href="{{url('users:logout')}}">>退出</a>
+          <a href="{{url('users:info')}}">>用户中心</a>
+        </template>
+      </div>
     </header>
     <nav class="nav">
       <ul>
         <li><a href="content.html">Home</a></li>
         <li><a href="register.html">Register</a></li>
-    </ul>
+      </ul>
     </nav>
     <aside class="sidebar">
       Sidebar
     </aside>
     <main class="content">
-        <div class="item special-item">Item 1</div>
-        <div class="item">Item 2</div>
-        <div class="item" id="unique-item">Item 3</div>
+      <div class="item special-item">Item 1</div>
+      <div class="item">Item 2</div>
+      <div class="item" id="unique-item">Item 3</div>
     </main>
     <footer class="footer">
       <div class="foot_link">
@@ -40,10 +55,10 @@
         <span>|</span>
         <a href="#">招聘人才</a>
         <span>|</span>
-        <a href="#">友情链接</a>		
+        <a href="#">友情链接</a>
       </div>
       <p>CopyRight © 2022 上海ai股份有限公司 All Rights Reserved</p>
-      <p>电话：021-****888    沪ICP备*******8号</p>
+      <p>电话：021-****888 沪ICP备*******8号</p>
     </footer>
   </div>
 </body>

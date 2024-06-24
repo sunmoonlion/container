@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid and Flex Layout</title>
+  <!-- 引入主题样式或自定义样式表 -->
+  <link rel="stylesheet" href="{{static('css/login.css')}}"> 
+  <!-- 引入 Vue 3 -->
+  <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js" ></script>
+  <!-- Axios for HTTP requests -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" ></script>
+  <!-- Your custom JavaScript file -->
+  <script src="{{ static('js/common.js') }}" defer></script>
+  <script src="{{ static('js/login.js') }}" defer></script>
+  </head>
+<body>
+  <div class="container" id="app">
+    <header class="header">
+      Header
+    </header>
+    <nav class="nav">
+      <a href="content.html">Home</a>
+      <a href="register.html">Register</a>
+    </nav>
+    <aside class="sidebar">
+        <a href="index.html" ><img src="{{ static('images/cat.jpg') }}"></a>
+			  <div class="reg_slogan"> 欢迎光临!</div>
+    </aside>
+    <main class="content">
+        <div class="login_title">
+          <h1>登录</h1>
+          <a href="{{ url('users:register')}}">注册</a>
+        </div>
+        <form method="post" class="login_form" @submit="on_submit" v-cloak>
+          {{ csrf_input }}
+          <ul>
+            <li>
+              <label>用户名:</label>
+              <input type="text" v-model="username" @blur="check_username" name="username" id="user_name">
+              <span class="error_tip" v-show="error_name">[[ error_name_message ]]</span>
+            </li>					
+            <li>
+              <label>密码:</label>
+              <input type="password" v-model="password" @blur="check_password" name="password" id="pwd">
+              <span class="error_tip" v-show="error_password">请输入8-20位的密码</span>
+            </li>
+
+            <li class="remembered">              
+              <input type="checkbox" v-model="remembered" name="remembered">
+              <label>记住登录</label>
+            </li>
+
+            <li class="login_sub">
+              <input type="submit" value="登录">
+            </li>
+          </ul>				
+        </form>
+    </main>
+    <footer class="footer">
+      <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>		
+      </div>
+      <p>CopyRight © 2022 上海ai股份有限公司 All Rights Reserved</p>
+      <p>电话：021-****888    沪ICP备*******8号</p>
+        </footer>
+  </div>
+</body>
+</html>

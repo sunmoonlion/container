@@ -48,12 +48,8 @@
     gap: 20px;
 }
 
-/* Register Form */
 
-.reg_logo{width:200px;height:76px;}
-.reg_slogan{width:30px;height:30px;font-size:22px;color:#fe0000;}
-
-/* Main Content */
+/* Content */
 .content {
     grid-area: content;
     display: flex;
@@ -64,45 +60,6 @@
     padding: 20px;
     gap: 30px;
 }
-
-/* login Form */
-
-.login_title {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    gap: 10px;
-    
-}
-.login_form li {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px; /* 调整项目之间的间距 */
-}
-
-.login_form li label {
-    flex: 0 0 100px; /* 固定 label 的宽度 */
-    text-align: right;
-    margin-right: 10px; /* 调整 label 和 input 之间的间距 */
-}
-
-login_form li input {
-    flex: 1; /* 填充剩余空间 */
-    height: 30px;
-    padding: 5px; /* 调整 input 的内边距 */
-    border: 1px solid #ccc;
-}
-
-
-.login_form li.remembered input{
-    width:15px;height:15px;
-}
-.login_form li.remembered label{
-    width:350px;
-    white-space: nowrap; /* 文字不换行 */
-}
-.login_form li.reg_sub input{width:380px;height:40px;background-color:#ff5757;font-size:18px;color:#fff;font-family:'Microsoft Yahei';cursor:pointer;}
 
 
 

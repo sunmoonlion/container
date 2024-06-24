@@ -5,7 +5,7 @@ const app = createApp({
         // Reactive state
         const username = ref('');
         const email = ref('');
-        const password = ref('');  // 修正
+        const password = ref('');  
         const password2 = ref('');
         const mobile = ref('');
         const allow = ref(false);

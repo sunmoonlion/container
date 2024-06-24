@@ -1,0 +1,141 @@
+/* 引入 reset.css */
+@import url('reset.css');
+
+/* Grid Container */
+.container {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "nav nav"
+        "sidebar content"
+        "footer footer";
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: 400px 1fr;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+.header-left {
+    font-size: 1.2em;
+}
+
+.header-right a {
+    margin-left: 15px;
+    color: white;
+    text-decoration: none;
+}
+
+.header-right a:hover {
+    text-decoration: underline;
+}
+
+/* Navigation */
+.nav {
+    grid-area: nav;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    background-color: #555;
+    color: white;
+    padding: 10px;
+    gap: 15px;
+}
+
+/* Sidebar */
+.sidebar {
+    grid-area: sidebar;
+    background-color: #f0f0f0;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+/* Register Form */
+.reg_logo {
+    width: 200px;
+    height: 76px;
+}
+
+.reg_slogan {
+    width: 30px;
+    height: 30px;
+    font-size: 22px;
+    color: #fe0000;
+}
+
+/* Main Content */
+.content {
+    grid-area: content;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f9f9f9;
+    padding: 20px;
+    gap: 30px;
+}
+
+/* Footer */
+.footer {
+    grid-area: footer;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-top: 1px solid #fe0000;
+    margin: 30px 0;
+}
+
+.foot_link {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.foot_link a,
+.foot_link span {
+    color: #4e4e4e;
+}
+
+.foot_link a:hover {
+    color: #ff8800;
+}
+
+.foot_link span {
+    padding: 0 10px;
+}
+
+.footer p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        grid-template-areas:
+            "header"
+            "nav"
+            "sidebar"
+            "content"
+            "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto;
+    }
+
+    .nav {
+        order: -1; /* Move navigation to the top on small screens */
+    }
+}

@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Grid and Flex Layout</title>
   <!-- 引入主题样式或自定义样式表 -->
-  <link rel="stylesheet" href="{{static('css/main.css')}}"> 
+  <link rel="stylesheet" href="{{static('css/register.css')}}"> 
   <!-- 引入 Vue 3 -->
   <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js" ></script>
   <!-- Axios for HTTP requests -->
@@ -24,13 +24,13 @@
       <a href="register.html">Register</a>
     </nav>
     <aside class="sidebar">
-        <a href="index.html" class="reg_logo"><img src="{{ static('images/cat.jpg') }}"></a>
-			  <div class="reg_slogan"> 欢迎光临!</div>
+        <a href="index.html" ><img src="{{ static('images/cat.jpg') }}"></a>
+			  <div> 欢迎光临!</div>
     </aside>
     <main class="content">
         <div class="reg_title">
           <h1>用户注册</h1>
-          <a href="login.html">登录</a>
+          <a href="{{ url('users:login') }}">登录</a>
         </div>
         <form method="post" class="reg_form" @submit="on_submit" v-cloak>
           {{ csrf_input }}

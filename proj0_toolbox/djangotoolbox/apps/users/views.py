@@ -7,8 +7,102 @@ from django.db import DatabaseError
 from django.urls import reverse
 from django.contrib.auth import login, authenticate, logout
 from django_redis import get_redis_connection
+from django.contrib.auth.mixins import LoginRequiredMixin
 from utils.response_code import RETCODE
 from users.models import User
+
+
+class UserInfoView(LoginRequiredMixin, View):
+    """用户中心"""
+
+    def get(self,request):
+        """提供用户中心页面"""
+        # 如果LoginRequiredMixin判断出用户已登录，那么request.user就是登陆用户对象
+        context = {
+            'username': request.user.username,
+            'mobile': request.user.mobile,
+            'email': request.user.email,
+            'email_active': request.user.email_active
+        }
+        return render(request, 'user_center_info.html', context)
+
+
+class LogoutView(View):
+    """用户退出登录"""
+
+    def get(self, request):
+        """实现用户退出登录的逻辑"""
+        # 清除状态保持信息
+        logout(request)
+
+        # 退出登录后重定向到首页
+        response = redirect(reverse('contents:index'))
+
+        # 删除cookies中的用户名
+        response.delete_cookie('username')
+
+        # 响应结果
+        return response
+
+
+class LoginView(View):
+    """用户登录"""
+
+    def get(self, request):
+        """提供用户登录页面"""
+        return render(request, 'login.html')
+
+    def post(self, request):
+        """实现用户登录逻辑"""
+        # 接收参数
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        remembered = request.POST.get('remembered')
+
+        # 校验参数
+        if not all([username, password]):
+            return http.HttpResponseForbidden('缺少必传参数')
+        if not re.match(r'^[a-zA-Z0-9_-]{5,20}$', username):
+            return http.HttpResponseForbidden('请输入正确的用户名或手机号')
+
+        if not re.match(r'^[0-9A-Za-z]{8,20}$', password):
+            return http.HttpResponseForbidden('密码最少8位，最长20位')
+
+        # 认证用户:使用账号查询用户是否存在，如果用户存在，再校验密码是否正确
+        user = authenticate(username=username, password=password)
+        if user is None:
+            return render(request, 'login.html', {'account_errmsg': '账号或密码错误'})
+
+        # 状态保持
+        login(request, user)
+        # 使用remembered确定状态保持周期（实现记住登录）
+        if remembered != 'on':
+            # 没有记住登录：状态保持在浏览器会话结束后就销毁
+            request.session.set_expiry(0) # 单位是秒
+        else:
+            # 记住登录：状态保持周期为两周:默认是两周
+            request.session.set_expiry(None)
+
+        # 响应结果
+        # 先取出next
+        next = request.GET.get('next')
+        if next:
+            # 重定向到next
+            response = redirect(next)
+        else:
+            # 重定向到首页
+            response = redirect(reverse('contents:index'))
+
+        # 为了实现在首页的右上角展示用户名信息，我们需要将用户名缓存到cookie中
+        # response.set_cookie('key', 'val', 'expiry')
+        response.set_cookie('username', user.username, max_age=3600 * 24 * 15)
+
+        # # 用户登录成功，合并cookie购物车到redis购物车
+        # response = merge_carts_cookies_redis(request=request, user=user, response=response)
+
+        # 响应结果
+        return response
+
 
 class MobileCountView(View):
     """判断手机号是否重复注册"""
