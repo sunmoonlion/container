@@ -8,8 +8,70 @@ from django.urls import reverse
 from django.contrib.auth import login, authenticate, logout
 from django_redis import get_redis_connection
 from django.contrib.auth.mixins import LoginRequiredMixin
+from celery_tasks.email_active.tasks import send_verify_email
+from users.utils import check_verify_email_token, generate_verify_email_url
+from utils.views import LoginRequiredJSONMixin
 from utils.response_code import RETCODE
 from users.models import User
+
+# 创建日志输出器
+logger = logging.getLogger('django')
+
+class VerifyEmailView(View):
+    """验证邮箱"""
+
+    def get(self, request):
+        # 接收参数
+        token = request.GET.get('token')
+
+        # 校验参数
+        if not token:
+            return http.HttpResponseForbidden('缺少token')
+
+        # 从token中提取用户信息user_id ==> user
+        user = check_verify_email_token(token)
+        if not user:
+            return http.HttpResponseBadRequest('无效的token')
+
+        # 将用户的email_active字段设置为True
+        try:
+            user.email_active = True
+            user.save()
+        except Exception as e:
+            logger.error(e)
+            return http.HttpResponseServerError('激活邮箱失败')
+
+        # 响应结果：重定向到用户中心
+        return redirect(reverse('users:info'))
+
+
+class EmailView(LoginRequiredJSONMixin, View):
+    """添加邮箱"""
+
+    def put(self, request):
+        # 接收参数
+        json_str = request.body.decode() # body 类型是bytes
+        json_dict = json.loads(json_str)
+        email = json_dict.get('email')
+        # 校验参数
+        if not re.match(r'^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$', email):
+            return http.HttpResponseForbidden('参数email有误')
+
+        # 将用户传入的邮箱保存到用户数据库的email字段中
+        try:
+            request.user.email = email
+            request.user.save()
+        except Exception as e:
+            logger.error(e)
+            return http.JsonResponse({'code': RETCODE.DBERR, 'errmsg': '添加邮箱失败'})
+
+        # 发送邮箱验证邮件
+        verify_url = generate_verify_email_url(request.user)
+        # send_verify_email(email, verify_url) # 错误的写法
+        send_verify_email.delay(email, verify_url) # 一定要记得调用delay
+
+        # 响应结果
+        return http.JsonResponse({'code': RETCODE.OK, 'errmsg': 'OK'})
 
 
 class UserInfoView(LoginRequiredMixin, View):

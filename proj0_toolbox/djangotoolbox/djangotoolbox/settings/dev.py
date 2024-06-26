@@ -25,6 +25,8 @@ sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-%)@6^n*#so%w!(fye%(%nmh*4u^(#c9l65o-8hzj1dj$$$8@i1'
+# 示例：定义一个 salt，确保是 bytes 类型
+EMAIL_TOKEN_SALT = b'your_salt_value_here'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -236,4 +238,23 @@ AUTHENTICATION_BACKENDS = ['users.utils.UsernameMobileBackend']
 
 # 判断用户是否登录后，指定未登录用户重定向的地址
 LOGIN_URL = '/login/'
+
+# 邮件参数
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # 导入邮件模块
+EMAIL_HOST = 'smtp.qq.com'  # 发邮件主机
+EMAIL_PORT = 587  # 发邮件端口
+EMAIL_HOST_USER = '1668372030@qq.com'  # 授权的邮箱
+EMAIL_HOST_PASSWORD = 'nwhigfhhunqbbafg'  # 邮箱授权时获得的密码，非注册登录密码
+EMAIL_FROM = 'djangotoolbox<1668372030@qq.com>'  # 发件人抬头
+# # 邮件参数
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'  # 导入邮件模块
+# EMAIL_HOST = 'smtp.163.com'  # 发邮件主机
+# EMAIL_PORT = 25  # 发邮件端口
+# EMAIL_HOST_USER = '13701819268@163.com'  # 授权的邮箱
+# EMAIL_HOST_PASSWORD = 'YNWKCEMEYLJDRVSF'  # 邮箱授权时获得的密码，非注册登录密码
+# EMAIL_FROM = 'djangotoolbox<13701819268@163.com>'  # 发件人抬头
+
+# 邮箱验证链接
+EMAIL_VERIFY_URL = 'http://47.100.19.119:8000/emails/verification/'
+
 

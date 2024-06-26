@@ -3,19 +3,31 @@ const { createApp, ref, onMounted } = Vue;
 const app = createApp({
     setup() {
         // 从模板获取变量并定义响应式变量
-        const username = ref(window.username); // 假设 window.username 是在模板中定义的全局变量
-        const mobile = ref(window.mobile); // 假设 window.mobile 是在模板中定义的全局变量
-        const email = ref(window.emailValue); // 假设 window.emailValue 是在模板中定义的全局变量
-        const email_active = ref(window.emailActiveValue === 'True'); // 假设 window.emailActiveValue 是在模板中定义的全局变量
+        const username = ref(''); // 假设 window.username 是在模板中定义的全局变量
+        const mobile = ref(''); // 假设 window.mobile 是在模板中定义的全局变量
+        const email = ref(''); // 假设 window.emailValue 是在模板中定义的全局变量
+        const email_active = ref(false); // 假设 window.emailActiveValue 是在模板中定义的全局变量
 
-        const set_email = ref("{{ email }}" === '');
+        const set_email = ref();
         const error_email = ref(false);
         const send_email_btn_disabled = ref(false);
-        const send_email_tip = ref('');
+        const send_email_tip = ref('重新发送验证邮件');
         const histories = ref([]);
 
-        const loggedIn = ref(false);
+        onMounted(() => {
+            username.value = window.username;
+            mobile.value = window.mobile
+            email.value = window.emailValue
+            // 邮箱是否激活：将Python的bool数据转成JS的bool数据
+            email_active.value = (window.emailActiveValue==="True")?true:false
+            // 是否在设置邮箱
+            set_email.value = (window.emailValue==='') ? true : false;
+    
+            // 请求浏览历史记录
+            this.browse_histories()
+    });
 
+       
         const check_email = () => {
             let re = /^[a-z0-9][\w\.\-]*@[a-z0-9\-]+(\.[a-z]{2,5}){1,2}$/;
             if (re.test(email.value)) {
@@ -68,20 +80,9 @@ const app = createApp({
             .catch(error => {
                 console.log(error.response);
             });
-        // };
-
-        // onMounted(() => {
-        //     // 从 Cookie 中获取用户名
-        //     const user = getCookie('username');
-        //     if (user) {
-        //         loggedIn.value = true;
-        //         username.value = user;
-        //     }
-        //     browse_histories();
-        // });
+        };
 
         return {
-            loggedIn,
             username,
             mobile,
             email,
@@ -97,7 +98,7 @@ const app = createApp({
             browse_histories
         };
     }
-}})
+});
 
 app.config.compilerOptions.delimiters = ['[[', ']]'];
 

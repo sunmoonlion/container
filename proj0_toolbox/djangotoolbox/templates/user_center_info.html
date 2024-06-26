@@ -12,10 +12,10 @@
   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" defer></script>
   <!-- Your custom JavaScript file -->
   <script >
-    const username = "{{ username }}";
-    const mobile = "{{ mobile }}";
-    const emailValue = "{{ email }}";
-    const emailActiveValue = "{{ email_active }}";
+    var username = "{{ username }}";
+    var mobile = "{{ mobile }}";
+    var emailValue = "{{ email }}";
+    var emailActiveValue = "{{ email_active }}";
   </script>
     
   <script src="{{ static('js/common.js') }}" defer></script>
@@ -28,16 +28,9 @@
         欢迎欢迎！
       </div>
       <div class="header-right">
-        <template v-if="!loggedIn">
-          <a href="{{url('users:register')}}">>注册</a>
-          <a href="{{url('users:login')}}">登录</a>
-          <a href="{{url('users:info')}}">>用户中心</a>
-        </template>
-        <template v-else>
-          <span>您好，{{ username }}</span>
-          <a href="{{url('users:logout')}}">>退出</a>
-          <a href="{{url('users:info')}}">>用户中心</a>
-        </template>
+        <span>您好，{{ username }}</span>
+        <a href="{{url('users:logout')}}">>退出</a>
+        <a href="{{url('users:info')}}">>用户中心</a>
       </div>
     </header>
     <nav class="nav">
