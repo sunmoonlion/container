@@ -1,9 +1,10 @@
 
 # from .views import RegisterView
 from django.urls import path, re_path
-
 from . import views
+
 app_name = 'users'
+
 urlpatterns = [
     # 用户注册: reverse(users:register) == '/register/'
     path(r'register/', views.RegisterView.as_view(), name='register'),
@@ -21,16 +22,16 @@ urlpatterns = [
     path(r'emails/', views.EmailView.as_view()),
     # 验证邮箱
     path(r'emails/verification/', views.VerifyEmailView.as_view()),
-    # # 展示用户地址
-    # path(r'addresses/', views.AddressView.as_view(), name='address'),
-    # # 新增用户地址
-    # path(r'addresses/create/', views.AddressCreateView.as_view()),
-    # # 更新和删除地址
-    # re_path(r'^addresses/(?P<address_id>\d+)/$', views.UpdateDestoryAddressView.as_view()),
-    # # 设置默认地址
-    # re_path(r'^addresses/(?P<address_id>\d+)/default/$', views.DefaultAddressView.as_view()),
-    # # 更新地址标题
-    # re_path(r'^addresses/(?P<address_id>\d+)/title/$', views.UpdateTitleAddressView.as_view()),
+    # 展示用户地址
+    path(r'addresses/', views.AddressView.as_view(), name='address'),
+    # 新增用户地址
+    path(r'addresses/create/', views.AddressCreateView.as_view()),
+    # 更新和删除地址
+    re_path(r'^addresses/(?P<address_id>\d+)/$', views.UpdateDestoryAddressView.as_view()),
+    # 设置默认地址
+    re_path(r'^addresses/(?P<address_id>\d+)/default/$', views.DefaultAddressView.as_view()),
+    # 更新地址标题
+    re_path(r'^addresses/(?P<address_id>\d+)/title/$', views.UpdateTitleAddressView.as_view()),
     # # 用户商品浏览记录
     # path(r'browse_histories/', views.UserBrowseHistory.as_view()),
 ]
