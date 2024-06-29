@@ -1,0 +1,300 @@
+/* 引入 reset.css */
+@import url('reset.css');
+
+/* Grid Container */
+.container {
+    display: grid;
+    grid-template-areas:
+        "header header"
+        "nav nav"
+        "sidebar content"
+        "footer footer";
+    grid-template-rows: auto auto 1fr auto;
+    grid-template-columns: 400px 1fr;
+    height: 100vh;
+}
+
+/* Header */
+.header {
+    grid-area: header;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+}
+
+.header-left {
+    font-size: 1.2em;
+}
+
+.header-right a {
+    margin-left: 15px;
+    color: white;
+    text-decoration: none;
+}
+
+.header-right a:hover {
+    text-decoration: underline;
+}
+
+/* Navigation */
+.nav {
+    grid-area: nav;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    background-color: #555;
+    color: white;
+    padding: 10px;
+    gap: 15px; /* 添加这一行来设置项目之间的间隔 */
+}
+
+.nav a {
+    color: white;
+    text-decoration: none;
+    padding: 5px;
+}
+
+.nav a:hover {
+    text-decoration: underline;
+}
+
+/* Sidebar */
+.sidebar {
+    grid-area: sidebar;
+    background-color: #f0f0f0;
+    padding: 10px;
+    display: flex;
+    flex-direction: column; /* 侧边栏内容垂直排列 */
+    justify-content: flex-start;
+    gap: 20px;
+}
+
+.sidebar h3 {
+    margin-bottom: 10px;
+}
+
+.sidebar ul {
+    list-style-type: none; /* 去除列表样式 */
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    margin-bottom: 5px;
+}
+
+.sidebar a {
+    text-decoration: none;
+    color: #333;
+}
+
+.sidebar a.active {
+    font-weight: bold;
+}
+
+/* Content */
+.content {
+    grid-area: content;
+    padding: 20px;
+}
+
+.content_main {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.content_title {
+    font-size: 1.5em;
+    margin-bottom: 20px;
+}
+
+.site_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.site_top a {
+    text-decoration: none;
+    color: #007bff;
+    cursor: pointer;
+}
+
+.site_list {
+    border-bottom: 1px solid #ddd;
+    padding: 10px 0;
+}
+
+.site_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.site_title div {
+    display: flex;
+    align-items: center;
+}
+
+.site_title input[type="text"] {
+    margin-right: 10px;
+}
+
+.site_title input[type="button"],
+.site_title input[type="reset"] {
+    margin-left: 5px;
+}
+
+.site_items {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.site_items li {
+    margin-bottom: 5px;
+}
+
+.site_items span {
+    display: inline-block;
+    width: 80px;
+}
+
+.down_btn {
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+}
+
+.down_btn a {
+    color: #007bff;
+    cursor: pointer;
+}
+
+/* Footer */
+.footer {
+    grid-area: footer;
+    background-color: #333;
+    color: white;
+    padding: 10px;
+    border-top: 1px solid #fe0000;
+    margin-top: 30px;
+}
+
+.foot_link {
+    text-align: center;
+    margin-top: 30px;
+}
+
+.foot_link a,
+.foot_link span {
+    color: #4e4e4e;
+}
+
+.foot_link a:hover {
+    color: #ff8800;
+}
+
+.foot_link span {
+    padding: 0 10px;
+}
+
+.footer p {
+    text-align: center;
+    margin-top: 10px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        grid-template-areas:
+            "header"
+            "nav"
+            "sidebar"
+            "content"
+            "footer";
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto 1fr auto;
+    }
+
+    .nav {
+        justify-content: center; /* 在小屏幕下居中导航栏 */
+    }
+
+    .sidebar {
+        justify-content: center; /* 在小屏幕下居中侧边栏 */
+    }
+}
+
+/* Pop-up and Form Styles */
+.pop_con {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.site_con {
+    background: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 500px;
+    position: relative;
+}
+
+.site_pop_title {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.site_pop_title h3 {
+    margin: 0;
+}
+
+.site_pop_title a {
+    font-size: 1.5em;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.form_group {
+    margin-bottom: 15px;
+}
+
+.form_group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form_group input[type="text"],
+.form_group select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.form_group span {
+    color: red;
+    font-size: 0.9em;
+}
+
+.info_submit {
+    background: #007bff;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;

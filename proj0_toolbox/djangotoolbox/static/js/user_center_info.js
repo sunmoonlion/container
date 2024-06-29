@@ -15,13 +15,13 @@ const app = createApp({
         const histories = ref([]);
 
         onMounted(() => {
-            username.value = window.username;
-            mobile.value = window.mobile
-            email.value = window.emailValue
+            username.value = username;
+            mobile.value = mobile
+            email.value = emailValue
             // 邮箱是否激活：将Python的bool数据转成JS的bool数据
-            email_active.value = (window.emailActiveValue==="True")?true:false
+            email_active.value = (emailActiveValue==="True")?true:false
             // 是否在设置邮箱
-            set_email.value = (window.emailValue==='') ? true : false;
+            set_email.value = (emailValue==='') ? true : false;
     
             // 请求浏览历史记录
             this.browse_histories()

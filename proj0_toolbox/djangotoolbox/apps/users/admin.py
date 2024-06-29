@@ -2,7 +2,8 @@
 
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
-from .models import User
+from .models import User, Address
+
 from .forms import UserCreationForm, UserChangeForm
 
 class UserAdmin(BaseUserAdmin):
@@ -30,4 +31,5 @@ class UserAdmin(BaseUserAdmin):
     actions = ['delete_selected']
 
 admin.site.register(User, UserAdmin)
+admin.site.register(Address)
 

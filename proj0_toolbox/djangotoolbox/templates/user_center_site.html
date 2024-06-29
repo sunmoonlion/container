@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grid and Flex Layout</title>
+  <!-- 引入主题样式或自定义样式表 -->
+  <link rel="stylesheet" href="{{ static('css/user_center_site.css') }}"> 
+  <!-- 引入 Vue 3 -->
+  <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
+  <!-- Axios for HTTP requests -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" ></script>
+  <!-- Your custom JavaScript file -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" ></script>
+  
+</head>
+<body>
+  <div class="container" id="app">
+    <header class="header">
+      <div class="header-left">
+        欢迎欢迎！
+      </div>
+      <div class="header-right">
+        <span>您好，[[ username ]]</span>
+        <a href="{{url('users:logout')}}">>退出</a>
+        <a href="{{url('users:info')}}">>用户中心</a>
+      </div>
+    </header>
+    <nav class="nav">
+        <li><a href="content.html">Home</a></li>
+        <li><a href="register.html">Register</a></li>
+    </nav>
+    <aside class="sidebar">
+      <h3>用户中心</h3>
+			<ul>
+				<li><a href="{{ url('users:info') }}" class="active">· 个人信息</a></li>
+        <li><a href="{{ url('users:address') }}" >· 通讯地址</a></li>
+        <li><a href="user_center_order.html">· 全部订单</a></li>
+				<li><a href="user_center_pass.html">· 修改密码</a></li>
+			</ul>
+    </aside>
+    <main class="content">
+        <h3 class="content_title">通讯地址</h3>
+        <div class="content_main " >
+          <div class="site_top">
+              <a @click="show_add_site">新增收货地址</a>
+              <!-- <span>你已创建了<b>[[ addresses.length ]]</b>个收货地址，最多可创建<b>20</b>个</span> -->
+          </div>
+          <div class="site_list" v-for="(address, index) in addresses">
+              <div class="site_title">
+                  <div v-if="edit_title_index===index">
+                      <input v-model="new_title" type="text" name="">
+                      <input @click="save_title(index)" type="button" name="" value="保 存">
+                      <input @click="cancel_title(index)" type="reset" name="" value="取 消">
+                  </div>
+                  <div>
+                      <h3>[[ address.title ]]</h3>
+                      <a @click="show_edit_title(index)" class="edit_title"></a>
+                  </div>
+                  <em v-if="address.id==default_address_id">默认地址</em>
+                  <span @click="delete_address(index)">×</span>
+              </div>
+              <ul class="site_items">
+                  <li><span>收货人：</span><b>[[ address.receiver ]]</b></li>
+                  <li><span>所在地区：</span><b>[[ address.province ]] [[address.city]] [[ address.district ]]</b></li>
+                  <li><span>地址：</span><b>[[ address.place ]]</b></li>
+                  <li><span>手机：</span><b>[[ address.mobile ]]</b></li>
+                  <li><span>固定电话：</span><b>[[ address.tel ]]</b></li>
+                  <li><span>电子邮箱：</span><b>[[ address.email ]]</b></li>
+              </ul>
+              <div class="down_btn">
+                  <a v-if="address.id!=default_address_id" @click="set_default(index)">设为默认</a>
+                  <a @click="show_edit_site(index)" class="edit_icon">编辑</a>
+              </div>
+          </div>
+      </div> 
+    </main>
+    <footer class="footer">
+      <div class="foot_link">
+        <a href="#">关于我们</a>
+        <span>|</span>
+        <a href="#">联系我们</a>
+        <span>|</span>
+        <a href="#">招聘人才</a>
+        <span>|</span>
+        <a href="#">友情链接</a>		
+      </div>
+      <p>CopyRight © 2022 上海ai股份有限公司 All Rights Reserved</p>
+      <p>电话：021-****888    沪ICP备*******8号</p>
+    </footer>
+    <div class="pop_con" v-show="is_show_edit" v-cloak>
+      <div class="site_con site_pop">
+              <div class="site_pop_title">
+                  <h3>新增收货地址</h3>
+                  <a @click="is_show_edit=false">×</a>
+              </div>
+              <form>
+                  <div class="form_group">
+                      <label>*收货人：</label>
+                      <input v-model="form_address.receiver" @blur="check_receiver" type="text" class="receiver">
+                      <span v-show="error_receiver" class="receiver_error">请填写收件人</span>
+                  </div>
+                  <div class="form_group">
+                      <label>*所在地区：</label>
+                      <select v-model="form_address.province_id">
+                          <option v-for="province in provinces" :value="province.id">[[ province.name ]]</option>
+                      </select>
+                      <select v-model="form_address.city_id">
+                          <option v-for="city in cities" :value="city.id">[[ city.name ]]</option>
+                      </select>
+                      <select v-model="form_address.district_id">
+                          <option v-for="district in districts" :value="district.id">[[ district.name ]]</option>
+                      </select>
+                  </div>
+                  <div class="form_group">
+                      <label>*详细地址：</label>
+                      <input v-model="form_address.place" @blur="check_place" type="text" class="place">
+                      <span v-show="error_place" class="place_error">请填写地址信息</span>
+                  </div>
+                  <div class="form_group">
+                      <label>*手机：</label>
+                      <input v-model="form_address.mobile" @blur="check_mobile" type="text" class="mobile">
+                      <span v-show="error_mobile" class="mobile_error">手机信息有误</span>
+                  </div>
+                  <div class="form_group">
+                      <label>固定电话：</label>
+                      <input v-model="form_address.tel" @blur="check_tel" type="text" class="tel">
+                      <span v-show="error_tel" class="tel_error">固定电话有误</span>
+                  </div>
+                  <div class="form_group">
+                      <label>邮箱：</label>
+                      <input v-model="form_address.email" @blur="check_email" type="text" class="email">
+                      <span v-show="error_email" class="email_error">邮箱信息有误</span>
+                  </div>
+                  <input @click="save_address" type="button" name="" value="新 增" class="info_submit">
+                  <input @click="is_show_edit=false" type="reset" name="" value="取 消" class="info_submit info_reset">
+              </form>
+      </div>
+      <div class="mask"></div>
+    </div>
+  </div>
+  <script type="text/javascript">
+    // 如果用json.parse转换，反而会导致错误，是因为{{ addresses | safe }}本身就是将后端传过滤的json字符串进行了解析！！！
+    // 直接将{{ addresses | safe }}赋值即可
+    // 另外，要使用window对象，因为Vue3中的data()方法只能在Vue实例中使用，而这里是在Vue实例外部
+    window.addresses = {{ addresses | safe }};
+    window.default_address_id = {{ default_address_id }};
+</script>
+
+  <!-- <script >
+    let addresses = {{ addresses | tojson | safe }};
+    let default_address_id = "{{ default_address_id }}";
+  </script> -->
+	<script type="text/javascript" src="{{ static('js/common.js') }}"></script>
+	<script type="text/javascript" src="{{ static('js/user_center_site.js') }}"></script>
+</body>
+</html>
