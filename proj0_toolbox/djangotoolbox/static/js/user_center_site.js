@@ -65,7 +65,7 @@ const app = createApp({
       is_show_edit.value = true;
       clear_all_errors();
       editing_address_index.value = index.toString();
-      Object.assign(form_address, JSON.parse(JSON.stringify(addresses[index])));
+      Object.assign(form_address, JSON.parse(JSON.stringify(window.addresses[index])));
     };
 
     const check_receiver = () => {
@@ -252,15 +252,6 @@ const app = createApp({
 
     const initializeData = async () => {
       await get_provinces();
-      // try {
-      //   console.log("Addresses from window:", addresses);  // 打印 addresses
-      //   const parsedAddresses = addresses;  // 确保 addresses 是从后端传来的 JSON 字符串
-      //   console.log("Parsed addresses:", parsedAddresses);  // 打印 parsedAddresses
-      //   addresses.push(...parsedAddresses);
-      //   console.log("Addresses after push:", addresses);  // 打印 addresses
-      // } catch (error) {
-      //   console.error('Error parsing addresses JSON:', error);
-      // addressesvalue = JSON.parse(JSON.stringify(addresses));
       addresses.value = window.addresses;
       default_address_id.value = window.default_address_id;
       

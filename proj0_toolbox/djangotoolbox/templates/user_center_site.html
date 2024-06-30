@@ -9,10 +9,7 @@
   <!-- 引入 Vue 3 -->
   <script src="https://unpkg.com/vue@3.4.27/dist/vue.global.js"></script>
   <!-- Axios for HTTP requests -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" ></script>
-  <!-- Your custom JavaScript file -->
-  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" ></script>
-  
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js" ></script>  
 </head>
 <body>
   <div class="container" id="app">
@@ -145,12 +142,7 @@
     // 另外，要使用window对象，因为Vue3中的data()方法只能在Vue实例中使用，而这里是在Vue实例外部
     window.addresses = {{ addresses | safe }};
     window.default_address_id = {{ default_address_id }};
-</script>
-
-  <!-- <script >
-    let addresses = {{ addresses | tojson | safe }};
-    let default_address_id = "{{ default_address_id }}";
-  </script> -->
+  </script>
 	<script type="text/javascript" src="{{ static('js/common.js') }}"></script>
 	<script type="text/javascript" src="{{ static('js/user_center_site.js') }}"></script>
 </body>
