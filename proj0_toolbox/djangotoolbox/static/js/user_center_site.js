@@ -2,7 +2,7 @@ const { createApp, ref, reactive, onMounted, watch } = Vue;
 
 const app = createApp({
   setup() {
-    const username = ref(getCookie('username')); // 假设 getCookie 函数已定义
+    const username = ref(getCookie('username')); 
     const is_show_edit = ref(false);
     const form_address = reactive({
       receiver: '',
@@ -65,7 +65,7 @@ const app = createApp({
       is_show_edit.value = true;
       clear_all_errors();
       editing_address_index.value = index.toString();
-      Object.assign(form_address, JSON.parse(JSON.stringify(window.addresses[index])));
+      Object.assign(form_address, JSON.parse(JSON.stringify(addresses.value[index])));
     };
 
     const check_receiver = () => {
@@ -119,7 +119,7 @@ const app = createApp({
               responseType: 'json'
             });
             if (response.data.code == '0') {
-              addresses.unshift(response.data.address);
+              addresses.value.unshift(response.data.address);
               is_show_edit.value = false;
             } else if (response.data.code == '4101') {
               location.href = '/login/?next=/addresses/';
@@ -127,13 +127,13 @@ const app = createApp({
               alert(response.data.errmsg);
             }
           } else {
-            const url = `/addresses/${addresses[editing_address_index.value].id}/`;
+            const url = `/addresses/${addresses.value[editing_address_index.value].id}/`;
             const response = await axios.put(url, form_address, {
               headers: { 'X-CSRFToken': getCookie('csrftoken') },
               responseType: 'json'
             });
             if (response.data.code == '0') {
-              addresses[editing_address_index.value] = response.data.address;
+              addresses.value[editing_address_index.value] = response.data.address;
               is_show_edit.value = false;
             } else if (response.data.code == '4101') {
               location.href = '/login/?next=/addresses/';
@@ -148,14 +148,14 @@ const app = createApp({
     };
 
     const delete_address = async (index) => {
-      const url = `/addresses/${addresses[index].id}/`;
+      const url = `/addresses/${addresses.value[index].id}/`;
       try {
         const response = await axios.delete(url, {
           headers: { 'X-CSRFToken': getCookie('csrftoken') },
           responseType: 'json'
         });
         if (response.data.code == '0') {
-          addresses.splice(index, 1);
+          addresses.value.splice(index, 1);
         } else if (response.data.code == '4101') {
           location.href = '/login/?next=/addresses/';
         } else {
@@ -167,14 +167,14 @@ const app = createApp({
     };
 
     const set_default = async (index) => {
-      const url = `/addresses/${addresses[index].id}/default/`;
+      const url = `/addresses/${addresses.value[index].id}/default/`;
       try {
         const response = await axios.put(url, {}, {
           headers: { 'X-CSRFToken': getCookie('csrftoken') },
           responseType: 'json'
         });
         if (response.data.code == '0') {
-          default_address_id.value = addresses[index].id;
+          default_address_id.value = addresses.value[index].id;
         } else if (response.data.code == '4101') {
           location.href = '/login/?next=/addresses/';
         } else {
@@ -198,14 +198,14 @@ const app = createApp({
       if (!new_title.value) {
         alert("请填写标题后再保存！");
       } else {
-        const url = `/addresses/${addresses[index].id}/title/`;
+        const url = `/addresses/${addresses.value[index].id}/title/`;
         try {
           const response = await axios.put(url, { title: new_title.value }, {
             headers: { 'X-CSRFToken': getCookie('csrftoken') },
             responseType: 'json'
           });
           if (response.data.code == '0') {
-            addresses[index].title = new_title.value;
+            addresses.value[index].title = new_title.value;
             cancel_title();
           } else if (response.data.code == '4101') {
             location.href = '/login/?next=/addresses/';
