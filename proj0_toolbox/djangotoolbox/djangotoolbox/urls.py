@@ -29,6 +29,8 @@ urlpatterns = [
     path(r'', include('verifications.urls')),
     # areas
     path(r'', include('areas.urls')),
+    #toolbox_admin
+    path('toolbox_admin/', include('toolbox_admin.urls')),
 ]
 # 开发时访问媒体资源，这不同于静态文件的访问机制（静态文件通过配置staticfiles_dirs来查找静态文件）
 if settings.DEBUG:
