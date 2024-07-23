@@ -14,15 +14,8 @@ networks: # 自定义网络(默认桥接), 不使用links通信
     driver: bridge
   p0_n_redis_master_1: 
     driver: bridge
-  # 为了在不同主机上的容器之间通信，可以使用外部网络，而当使用外部网络时，需要设置external为true，不过，这个网络必须是已经存在的，可以通过docker network create p0_n_fastdfs创建
-  # p0_n_fastdfs:
-  #   external: true  
-  # 如果将网络定义在docker-compose.yaml文件中而使用下面形式，那么，它只是在运行yaml文件的主机上创建网络，其他主机不能共享该网络
-  p0_n_tracker_master_1:
-    driver: bridge
-
-  # 说明一下，以上两种方式都可以使用服务名直接在容器间通信，为了能在不同主机上进行通信而且不首先定义外部网络这种方式，我们也可以干脆不用自定义网络而直接使用ip地址
-  # 不过，我们仍可以将上述bridge的网络创建出来，只不过我们不使用它罢了（之所以如此，是我们在单机上创建一个tracker和一个storage时，仍可以使用这个yaml文件）
+  # fastdfs-net:
+  #   driver: bridge
 
 
 services:
@@ -83,42 +76,66 @@ services:
     #restart: always
 
   p0_s_tracker_master_1:
-    image: delron/fastdfs
-    #restart: always
+    image: ygqygq2/fastdfs-nginx:latest
     container_name: container_p0_s_tracker_master_1
-    volumes:
+    command: tracker
+    network_mode: host
+    # networks:
+    #   - fastdfs-net
+    volumes:   
       - p0_v_tracker_master_1:/var/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf/tracker.conf:/etc/fdfs/tracker.conf
-    command: "tracker"
-    networks:
-      - p0_n_tracker_master_1
-    ports:
-      - "22120:22122"
+      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
+      - ./proj0_toolbox/proj0_config/p0_b_tracker_master_1/nginx.conf:/usr/local/nginx/conf/conf.d
+    # ports:
+    #   - 22122:22122
 
   p0_s_storage_master_1:
-    image: delron/fastdfs
-    #restart: always
+    image: ygqygq2/fastdfs-nginx:latest
     container_name: container_p0_s_storage_master_1
-    volumes:
+    command: storage
+    network_mode: host  
+    # networks:
+    #   - fastdfs-net
+    # environment:
+    #   - TRACKER_SERVER=tracker:22122
+    volumes: 
       - p0_v_storage_master_1:/var/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf/storage.conf:/etc/fdfs/storage.conf # 挂载storage配置文件
-    command: "storage"
-    networks:
-      - p0_n_tracker_master_1
-    ports:
-      - "23000:23000"
-      - "8880:8888" # 访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
-  
+      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
+      - ./proj0_toolbox/proj0_config/p0_b_tracker_master_1/nginx.conf:/usr/local/nginx/conf/conf.d
+    # ports:
+    #   - 28080:8080
+    depends_on:
+      - p0_s_tracker_master_1
+
+  p0_s_tracker_slave_1:
+    image: ygqygq2/fastdfs-nginx:latest
+    container_name: container_p0_s_tracker_slave_1
+    command: tracker
+    network_mode: host
+    # networks:
+    #   - fastdfs-net
+    volumes:   
+      - p0_v_tracker_slave_1:/var/fdfs
+      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
+      - ./proj0_toolbox/proj0_config/p0_b_tracker_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
+    # ports:
+    #   - 22122:22122
+
   p0_s_storage_slave_1:
-    image: delron/fastdfs
-    #restart: always
+    image: ygqygq2/fastdfs-nginx:latest
     container_name: container_p0_s_storage_slave_1
-    volumes:
+    command: storage
+    network_mode: host  
+    # networks:
+    #   - fastdfs-net
+    # environment:
+    #   - TRACKER_SERVER=tracker:22122
+    volumes: 
       - p0_v_storage_slave_1:/var/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf/storage.conf:/etc/fdfs/storage.conf # 挂载storage配置文件
-    command: "storage"
-    networks:
-      - p0_n_tracker_master_1
-    ports:
-      - "33000:23000"
-      - "9880:8888" # 访问fastdfs的图片时，由于服务里用到nginx反向代理，所以，要映射出去
+      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
+      - ./proj0_toolbox/proj0_config/p0_b_tracker_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
+    # ports:
+    #   - 28080:8080
+    depends_on:
+      - p0_s_tracker_slave_1
+  
