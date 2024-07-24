@@ -82,10 +82,12 @@ services:
     network_mode: host
     # networks:
     #   - fastdfs-net
+    # environment:
+    #   - CUSTOM_CONFIG=true
     volumes:   
       - p0_v_tracker_master_1:/var/fdfs
       - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_tracker_master_1/nginx.conf:/usr/local/nginx/conf/conf.d
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/nginx.conf/conf.d:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 22122:22122
 
@@ -97,11 +99,12 @@ services:
     # networks:
     #   - fastdfs-net
     # environment:
+    #   - CUSTOM_CONFIG=true
     #   - TRACKER_SERVER=tracker:22122
     volumes: 
       - p0_v_storage_master_1:/var/fdfs
       - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_tracker_master_1/nginx.conf:/usr/local/nginx/conf/conf.d
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/nginx.conf/conf.d:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 28080:8080
     depends_on:
@@ -114,10 +117,12 @@ services:
     network_mode: host
     # networks:
     #   - fastdfs-net
+    # environment:
+    #   - CUSTOM_CONFIG=true
     volumes:   
       - p0_v_tracker_slave_1:/var/fdfs
       - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_tracker_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 22122:22122
 
@@ -129,11 +134,12 @@ services:
     # networks:
     #   - fastdfs-net
     # environment:
+    #   - CUSTOM_CONFIG=true
     #   - TRACKER_SERVER=tracker:22122
     volumes: 
       - p0_v_storage_slave_1:/var/fdfs
       - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_tracker_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 28080:8080
     depends_on:
