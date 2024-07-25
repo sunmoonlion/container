@@ -86,7 +86,7 @@ services:
     #   - CUSTOM_CONFIG=true
     volumes:   
       - p0_v_tracker_master_1:/var/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
       # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/nginx.conf/conf.d:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 22122:22122
@@ -98,12 +98,14 @@ services:
     network_mode: host  
     # networks:
     #   - fastdfs-net
-    # environment:
+    environment:
     #   - CUSTOM_CONFIG=true
-    #   - TRACKER_SERVER=tracker:22122
+    # TRACKER_SERVER设置相同，使得同一组内的storage可以互相复制，否则，无法复制
+      - TRACKER_SERVER=47.100.19.119:22122
+      # - TRACKER_SERVER=47.103.135.26:22122      
     volumes: 
       - p0_v_storage_master_1:/var/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/conf:/etc/fdfs
       # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_master_1/nginx.conf/conf.d:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 28080:8080
@@ -121,7 +123,7 @@ services:
     #   - CUSTOM_CONFIG=true
     volumes:   
       - p0_v_tracker_slave_1:/var/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
       # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 22122:22122
@@ -133,15 +135,18 @@ services:
     network_mode: host  
     # networks:
     #   - fastdfs-net
-    # environment:
+    environment:
     #   - CUSTOM_CONFIG=true
-    #   - TRACKER_SERVER=tracker:22122
+    # TRACKER_SERVER设置相同，使得同一组内的storage可以互相复制，否则，无法复制,此时，在client内也只能设置一个相同的tracker，如果设置多个，会导致client错误
+      - TRACKER_SERVER=47.100.19.119:22122
+      # - TRACKER_SERVER=47.103.135.26:22122
     volumes: 
       - p0_v_storage_slave_1:/var/fdfs
-      - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
+      # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/conf:/etc/fdfs
       # - ./proj0_toolbox/proj0_config/p0_b_fastdfs_slave_1/nginx.conf:/usr/local/nginx/conf/conf.d
     # ports:
     #   - 28080:8080
     depends_on:
+    #如果也启动本机的tracker，那么，只能等待本机的tracker，不能等待其他机器的tracker，否则，host导致端口冲突
       - p0_s_tracker_slave_1
   
