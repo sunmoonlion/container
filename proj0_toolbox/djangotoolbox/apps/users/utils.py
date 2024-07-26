@@ -64,67 +64,66 @@ def get_user_by_account(account):
     else:
         return user
 
-class UsernameMobileBackend(ModelBackend):
-    """自定义用户认证后端"""
-
-    def authenticate(self, request, username=None, password=None, **kwargs):
-        """
-        重写用户认证的方法
-        :param username: 用户名或手机号
-        :param password: 密码明文
-        :param kwargs: 额外参数
-        :return: user
-        """
-        # 查询用户
-        user = get_user_by_account(username)
-    
-        # 如果可以查询到用户，好需要校验密码是否正确
-        if user and user.check_password(password):
-            # 返回user
-            return user
-        else:
-            return None
-
-# class DjangotoolboxModelBackendModelBackend(ModelBackend):
+# class UsernameMobileBackend(ModelBackend):
+#     """自定义用户认证后端"""
 
 #     def authenticate(self, request, username=None, password=None, **kwargs):
-#         if request:
-#             # 后台登录
-#             try:
-#                 # is_superuser判断用户是否是超级管理员用户
-
-#                 user = User.objects.get(username=username,is_superuser=True)
-#             except:
-#                 user = None
-
-#             if user is not None and user.check_password(password):
-#                 return user
-
-
+#         """
+#         重写用户认证的方法
+#         :param username: 用户名或手机号
+#         :param password: 密码明文
+#         :param kwargs: 额外参数
+#         :return: user
+#         """
+#         # 查询用户
+#         user = get_user_by_account(username)
+    
+#         # 如果可以查询到用户，好需要校验密码是否正确
+#         if user and user.check_password(password):
+#             # 返回user
+#             return user
 #         else:
-#             # try:
-#             #     # if re.match(r'^1[3-9]\d{9}$', username):
-#             #     #     user = User.objects.get(mobile=username)
-#             #     # else:
-#             #     #     user = User.objects.get(username=username)
-#             #     user = User.objects.get(username=username)
-#             # except:
-#             #     # 如果未查到数据，则返回None，用于后续判断
-#             #     try:
-#             #         user = User.objects.get(mobile=username)
-#             #     except:
-#             #         return None
-#             #         # return None
-#             #
-#             # # 判断密码
-#             # if user.check_password(password):
-#             #     return user
-#             # else:
-#             #     return None
-#             try:
-#                 user = User.objects.get(Q(username=username) | Q(mobile=username))
-#                 # if user.check_password(password):
-#                 #     return user
-#                 return user
-#             except Exception as e:
-#                 return None
+#             return None
+
+class DjangotoolboxModelBackendModelBackend(ModelBackend):
+
+    def authenticate(self, request, username=None, password=None, **kwargs):
+        if request:
+            # 后台登录
+            try:
+                # is_superuser判断用户是否是超级管理员用户
+
+                user = User.objects.get(username=username,is_superuser=True)
+            except:
+                user = None
+
+            if user is not None and user.check_password(password):
+                return user
+
+
+        else:
+            # try:
+            #     if re.match(r'^1[3-9]\d{9}$', username):
+            #         user = User.objects.get(mobile=username)
+            #     else:
+            #         user = User.objects.get(username=username)
+            #     user = User.objects.get(username=username)
+            # except:
+            #     # 如果未查到数据，则返回None，用于后续判断
+            #     try:
+            #         user = User.objects.get(mobile=username)
+            #     except:
+            #         return None
+            
+            # # 判断密码
+            # if user.check_password(password):
+            #     return user
+            # else:
+            #     return None
+            try:
+                user = User.objects.get(Q(username=username) | Q(mobile=username))
+                # if user.check_password(password):
+                #     return user
+                return user
+            except Exception as e:
+                return None

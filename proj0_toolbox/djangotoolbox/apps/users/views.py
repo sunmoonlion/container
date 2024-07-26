@@ -8,13 +8,15 @@ from django.urls import reverse
 from django.contrib.auth import login, authenticate, logout
 from django_redis import get_redis_connection
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth import get_user_model
 from celery_tasks.email_active.tasks import send_verify_email
 from users.utils import check_verify_email_token, generate_verify_email_url
 from utils.views import LoginRequiredJSONMixin
 from users.models import Address
 from utils.response_code import RETCODE
-from users.models import User
 from . import constants
+
+User =get_user_model()
 
 # 创建日志输出器
 logger = logging.getLogger('django')

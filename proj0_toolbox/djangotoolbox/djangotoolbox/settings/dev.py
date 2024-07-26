@@ -238,8 +238,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'users.User'
 
 # 指定自定义用户认证后端
-AUTHENTICATION_BACKENDS = ['users.utils.UsernameMobileBackend']
-# AUTHENTICATION_BACKENDS = ['users.utils.DjangotoolboxModelBackend']
+# AUTHENTICATION_BACKENDS = ['users.utils.UsernameMobileBackend']
+AUTHENTICATION_BACKENDS = ['users.utils.DjangotoolboxModelBackend']
 
 # 判断用户是否登录后，指定未登录用户重定向的地址
 LOGIN_URL = '/login/'
@@ -267,6 +267,9 @@ DEFAULT_FILE_STORAGE = 'utils.fastdfs.fdfs_storage.FastDFSStorage'
 FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
 # FastDFS相关参数
 FDFS_BASE_URL = 'http://47.103.135.26:8080/'
+
+# 配置本地存储
+LOCAL_STORAGE = 'utils.local_storage.LocalStorage'
 
 # # CORS
 # CORS_ORIGIN_WHITELIST = (
