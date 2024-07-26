@@ -9,7 +9,7 @@ urlpatterns = [
     # 登录
     path('token/', login.MyObtainTokenPairView.as_view(), name='token_obtain_pair'),
     path('token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('token/verify/', TokenVerifyView.as_view(), name='token_refresh'),
+    path('token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     # --------------  数据统计 -----------------
     # 用户总量
     path(r'statistical/total_count/', statistical.UserCountView.as_view()),

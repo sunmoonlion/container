@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'verifications',
     'areas',
      'corsheaders',
+     'django_filters',
 ]
 
 MIDDLEWARE = [
@@ -260,6 +261,12 @@ EMAIL_FROM = 'djangotoolbox<1668372030@qq.com>'  # 发件人抬头
 
 # 邮箱验证链接
 EMAIL_VERIFY_URL = 'http://47.100.19.119:8000/emails/verification/'
+
+# 指定自定义的Django文件存储类
+DEFAULT_FILE_STORAGE = 'utils.fastdfs.fdfs_storage.FastDFSStorage'
+FDFS_CLIENT_CONF = os.path.join(BASE_DIR, 'utils/fastdfs/client.conf')
+# FastDFS相关参数
+FDFS_BASE_URL = 'http://47.103.135.26:8080/'
 
 # # CORS
 # CORS_ORIGIN_WHITELIST = (
