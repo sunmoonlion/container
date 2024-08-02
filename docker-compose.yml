@@ -8,6 +8,9 @@ volumes: # 自定义数据卷
   p0_v_tracker_slave_1:
   p0_v_storage_master_1:
   p0_v_storage_slave_1:
+  p0_v_es_master_1:
+  p0_v_es_slave_1:
+  p0_v_es_2.4.6:
 
 networks: # 自定义网络(默认桥接), 不使用links通信
   p0_n_mysql_master_1:
@@ -149,4 +152,46 @@ services:
     depends_on:
     #如果也启动本机的tracker，那么，只能等待本机的tracker，不能等待其他机器的tracker，否则，host导致端口冲突
       - p0_s_tracker_slave_1
+
+  p0_s_es_master_1:
+    image: elasticsearch
+    container_name: container_p0_s_es_master_1
+    environment:
+      - node.name=p0_node_es_master_1
+      - cluster.name=p0_cluster_es_1
+      - discovery.seed_hosts=47.100.19.119
+      - cluster.initial_master_nodes=p0_node_es_master_1,p0_node_es_slave_1
+      - network.host=0.0.0.0
+      - http.port=9200
+    volumes:
+      - p0_v_es_master_1:/usr/share/elasticsearch/data  
+    network_mode: host
+
+  p0_s_es_slave_1:
+    image: elasticsearch
+    container_name: container_p0_s_es_slave_1
+    environment:
+      - node.name=p0_node_es_slave_1
+      - cluster.name=p0_cluster_es_1
+      - discovery.seed_hosts=47.103.135.26
+      - cluster.initial_master_nodes=p0_node_es_master_1,p0_node_es_slave_1
+      - network.host=0.0.0.0
+      - http.port=9200
+    volumes:
+      - p0_v_es_slave_1:/usr/share/elasticsearch/data
+    network_mode: host
   
+  elasticsearch:
+    image: elasticsearch:2.4.6
+    container_name: container_elasticsearch
+    environment:
+      - node.name=es_node_1
+      - cluster.name=p0_cluster_es_1
+      - discovery.zen.ping.unicast.hosts=localhost:9300  # 配置种子节点,注意配置不同于7.0版本后的配置，7.0版本后的配置为discovery.seed_hosts
+      - discovery.zen.ping.multicast.enabled=false  # 禁用多播，这也不同于7.0版本后的配置，7.0版本后的配置没有这个配置
+      - network.host=0.0.0.0
+      - http.port=9200
+      - ES_JAVA_OPTS=-Xms1g -Xmx1g  # 设置 JVM 堆内存
+    volumes:
+      - p0_v_es_2.4.6:/usr/share/elasticsearch/data
+    network_mode: host  # 使用主机网络模式，便于网络访问
