@@ -48,8 +48,10 @@ INSTALLED_APPS = [
     'contents',
     'verifications',
     'areas',
-     'corsheaders',
-     'django_filters',
+    'django_filters',
+    'toolbox_admin',
+    'corsheaders',  # 跨域模块
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

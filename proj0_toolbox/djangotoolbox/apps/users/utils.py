@@ -85,7 +85,7 @@ def get_user_by_account(account):
 #         else:
 #             return None
 
-class DjangotoolboxModelBackendModelBackend(ModelBackend):
+class DjangotoolboxModelBackend(ModelBackend):
 
     def authenticate(self, request, username=None, password=None, **kwargs):
         if request:
